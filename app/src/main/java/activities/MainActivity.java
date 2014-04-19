@@ -1,9 +1,9 @@
-package com.tieorange.graycardinal.app;
+package activities;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,39 +17,43 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.tieorange.graycardinal.app.R;
+
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
+
+import application.Constants;
 
 
 public class MainActivity extends ActionBarActivity {
 
-    private static final int PICK_CONTACT = 1;
-    private final ArrayList<String> mMStringArray1 = new ArrayList<String>();
+    private ArrayList<String> mContactsNamesList = new ArrayList<String>();
     private ListView mUiMyListView;
     private ImageView mUiContactPhoto;
+    private ArrayAdapter<String> mAdapterContacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initViews();
+        startContactsIntent();
+
+    }
+
+    private void startContactsIntent() {
+        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        startActivityForResult(intent, Constants.PICK_CONTACT);
+    }
+
+    private void initViews() {
         mUiMyListView = (ListView) findViewById(R.id.main_contacts_list);
         mUiContactPhoto = (ImageView) findViewById(R.id.main_contact_photo);
 
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        startActivityForResult(intent, PICK_CONTACT);
-
-
-
-
-        mMStringArray1.add("something");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        mAdapterContacts = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
-                mMStringArray1);
-        mUiMyListView.setAdapter(adapter);
-
-        mMStringArray1.add("something2");
-
+                mContactsNamesList);
+        mUiMyListView.setAdapter(mAdapterContacts);
     }
 
     @Override
@@ -57,7 +61,7 @@ public class MainActivity extends ActionBarActivity {
         super.onActivityResult(reqCode, resultCode, data);
 
         switch (reqCode) {
-            case (PICK_CONTACT):
+            case (Constants.PICK_CONTACT):
                 if (resultCode == Activity.RESULT_OK) {
                     Uri contactData = data.getData();
                     Cursor c = getContentResolver().query(contactData, null, null, null, null);
@@ -65,27 +69,20 @@ public class MainActivity extends ActionBarActivity {
                     if (c.moveToFirst()) {
                         String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                         long id = Long.parseLong(c.getString(c.getColumnIndex(ContactsContract.Contacts._ID)));
-                        mUiContactPhoto.setImageBitmap(openPhoto(id));
-                        mMStringArray1.add(name);
-                        // TODO Whatever you want to do with the selected contact name.
+                        mUiContactPhoto.setImageBitmap(getContactPhoto(id));
+                        mContactsNamesList.add(name);
                     }
                 }
                 break;
         }
     }
-    public static Bitmap loadContactPhoto(ContentResolver cr, long  id) {
-        Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id);
-        InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(cr, uri);
-        if (input == null) {
-            return null;
-        }
-        return BitmapFactory.decodeStream(input);
-    }
-    public Bitmap openPhoto(long contactId) {
+
+
+    public Bitmap getContactPhoto(long contactId) {
         Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
         Uri photoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
         Cursor cursor = getContentResolver().query(photoUri,
-                new String[] {ContactsContract.Contacts.Photo.PHOTO}, null, null, null);
+                new String[]{ContactsContract.Contacts.Photo.PHOTO}, null, null, null);
         if (cursor == null) {
             return null;
         }
@@ -101,6 +98,12 @@ public class MainActivity extends ActionBarActivity {
         }
         return null;
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
