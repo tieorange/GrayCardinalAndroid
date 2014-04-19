@@ -1,6 +1,7 @@
 package adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import java.util.List;
 import models.Contact;
 
 
-public class ContactsAdapter  extends BaseAdapter {
+public class ContactsAdapter extends BaseAdapter {
     private List<Contact> mContact;
     private LayoutInflater mInflater = null;
 
@@ -66,7 +67,14 @@ public class ContactsAdapter  extends BaseAdapter {
 
         if (friend != null) {
             viewHolder.name.setText(mContact.get(position).getName());
-            viewHolder.photo.setImageBitmap(mContact.get(position).getPhoto());
+
+            Bitmap photo = mContact.get(position).getPhoto();
+            if (photo == null) {
+                viewHolder.photo.setVisibility(View.GONE);
+            } else {
+                viewHolder.photo.setVisibility(View.VISIBLE);
+                viewHolder.photo.setImageBitmap(photo);
+            }
         }
         return view;
     }

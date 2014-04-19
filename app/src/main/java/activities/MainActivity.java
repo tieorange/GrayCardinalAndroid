@@ -67,7 +67,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void addContactToList(Contact contact) {
-        for (int i =0 ; i < 200; i++)
+        for (int i =0 ; i < 50; i++)
         mContactsList.add(contact);
 
         mContactsAdapter.notifyDataSetChanged();
