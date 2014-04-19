@@ -9,8 +9,6 @@ import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
@@ -18,6 +16,7 @@ import com.tieorange.graycardinal.app.R;
 
 import java.util.ArrayList;
 
+import adapters.ContactsAdapter;
 import application.Constants;
 import models.Contact;
 import tools.ContactsHelper;
@@ -25,10 +24,9 @@ import tools.ContactsHelper;
 
 public class MainActivity extends ActionBarActivity {
 
-    private ArrayList<String> mContactsNamesList = new ArrayList<String>();
+    private ArrayList<Contact> mContactsList = new ArrayList<Contact>();
     private ListView mUiMyListView;
-    private ImageView mUiContactPhoto;
-    private ArrayAdapter<String> mAdapterContacts;
+    private ContactsAdapter mContactsAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,13 +42,10 @@ public class MainActivity extends ActionBarActivity {
 
     private void initViews() {
         mUiMyListView = (ListView) findViewById(R.id.main_contacts_list);
-        mUiContactPhoto = (ImageView) findViewById(R.id.main_contact_photo);
 
-        mAdapterContacts = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                mContactsNamesList);
+        mContactsAdapter = new ContactsAdapter(this, mContactsList);
 
-        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mAdapterContacts);
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mContactsAdapter);
         scaleInAnimationAdapter.setAbsListView(mUiMyListView);
         mUiMyListView.setAdapter(scaleInAnimationAdapter);
     }
@@ -73,9 +68,9 @@ public class MainActivity extends ActionBarActivity {
 
     private void addContactToList(Contact contact) {
         for (int i =0 ; i < 200; i++)
-        mAdapterContacts.add(contact.getName());
+        mContactsList.add(contact);
 
-        mUiContactPhoto.setImageBitmap(contact.getPhoto());
+        mContactsAdapter.notifyDataSetChanged();
     }
 
 
