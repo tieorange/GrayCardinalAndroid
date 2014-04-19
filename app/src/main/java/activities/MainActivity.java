@@ -46,7 +46,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void initViews() {
-        getSupportActionBar().setTitle(null);
         mUiMyListView = (ListView) findViewById(R.id.main_contacts_list);
         mUiContactPhoto = (ImageView) findViewById(R.id.main_contact_photo);
 
