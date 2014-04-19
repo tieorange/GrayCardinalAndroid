@@ -37,7 +37,6 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-        startContactsIntent();
 
     }
 
@@ -47,6 +46,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void initViews() {
+        getSupportActionBar().setTitle(null);
         mUiMyListView = (ListView) findViewById(R.id.main_contacts_list);
         mUiContactPhoto = (ImageView) findViewById(R.id.main_contact_photo);
 
@@ -71,6 +71,7 @@ public class MainActivity extends ActionBarActivity {
                         long id = Long.parseLong(c.getString(c.getColumnIndex(ContactsContract.Contacts._ID)));
                         mUiContactPhoto.setImageBitmap(getContactPhoto(id));
                         mContactsNamesList.add(name);
+                        mAdapterContacts.notifyDataSetChanged();
                     }
                 }
                 break;
@@ -106,7 +107,6 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -118,8 +118,12 @@ public class MainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             return true;
+        }*/
+        if(id == R.id.action_add_contact)
+        {
+            startContactsIntent();
         }
         return super.onOptionsItemSelected(item);
     }
