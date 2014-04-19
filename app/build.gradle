@@ -3,7 +3,9 @@ apply plugin: 'android'
 android {
     compileSdkVersion 19
     buildToolsVersion "19.0.3"
-
+    repositories {
+        mavenCentral()
+    }
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion 19
@@ -21,5 +23,6 @@ android {
 dependencies {
     compile 'com.android.support:gridlayout-v7:19.1.0'
     compile 'com.android.support:appcompat-v7:19.+'
+    compile 'com.nhaarman.listviewanimations:library:2.6.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

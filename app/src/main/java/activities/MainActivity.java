@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.tieorange.graycardinal.app.R;
 
 import java.util.ArrayList;
@@ -28,7 +29,6 @@ public class MainActivity extends ActionBarActivity {
     private ListView mUiMyListView;
     private ImageView mUiContactPhoto;
     private ArrayAdapter<String> mAdapterContacts;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +49,10 @@ public class MainActivity extends ActionBarActivity {
         mAdapterContacts = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
                 mContactsNamesList);
-        mUiMyListView.setAdapter(mAdapterContacts);
+
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mAdapterContacts);
+        scaleInAnimationAdapter.setAbsListView(mUiMyListView);
+        mUiMyListView.setAdapter(scaleInAnimationAdapter);
     }
 
     @Override
@@ -69,7 +72,9 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void addContactToList(Contact contact) {
+        for (int i =0 ; i < 200; i++)
         mAdapterContacts.add(contact.getName());
+
         mUiContactPhoto.setImageBitmap(contact.getPhoto());
     }
 
