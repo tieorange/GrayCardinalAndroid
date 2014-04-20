@@ -6,10 +6,8 @@ import com.activeandroid.annotation.Table;
 
 @Table(name = "ContactsInfo")
 public class ContactInfo extends Model {
-
     @Column(name = "Contact", onDelete = Column.ForeignKeyAction.CASCADE)
     public Contact contact;
-
     @Column(name = "Name")
     private String name;
     @Column(name = "content")
@@ -21,6 +19,12 @@ public class ContactInfo extends Model {
 
     public ContactInfo(String name, String content) {
         super();
+        this.name = name;
+        this.content = content;
+    }
+
+    public ContactInfo(String name, String content, Contact contact) {
+        this.contact = contact;
         this.name = name;
         this.content = content;
     }

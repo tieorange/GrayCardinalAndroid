@@ -3,17 +3,17 @@ package activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.activeandroid.Model;
-import com.activeandroid.query.Select;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.tieorange.graycardinal.app.R;
 
@@ -38,20 +38,13 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         initViews();
 
-        Contact contact = new Contact("Andrii kovalchuk", BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
+
+     /*   Contact contact = new Contact("Andrii kovalchuk", BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
         contact.save();
 
         ContactInfo contactInfo = new ContactInfo("favourite color", "green");
         contactInfo.contact = contact;
-        contactInfo.save();
-
-
-        Contact model = new Select().from(Contact.class).executeSingle();
-        ArrayList<Model> all = Contact.all(Contact.class);
-        Contact first = Contact.getFirst();
-
-        ArrayList<Model> all1 = ContactInfo.all(ContactInfo.class);
-        Model model1 = new Select().from(ContactInfo.class).executeSingle();
+        contactInfo.save();*/
 
     }
 
@@ -68,6 +61,17 @@ public class MainActivity extends ActionBarActivity {
         ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mContactsAdapter);
         scaleInAnimationAdapter.setAbsListView(mUiMyListView);
         mUiMyListView.setAdapter(scaleInAnimationAdapter);
+
+        mUiMyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
+                Contact selectedItem = (Contact) adapter.getAdapter().getItem(position);
+
+                String content = selectedItem.infoList().get(0).getContent();
+                Toast.makeText(MainActivity.this, content, Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     @Override
@@ -90,7 +94,10 @@ public class MainActivity extends ActionBarActivity {
         for (int i = 0; i < 50; i++)
             mContactsList.add(contact);
 
+        ContactInfo info = new ContactInfo("name", "value", contact);
         contact.save();
+        info.save();
+
         mContactsAdapter.notifyDataSetChanged();
     }
 
