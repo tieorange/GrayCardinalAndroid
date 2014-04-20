@@ -93,11 +93,11 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void addContactToList(Contact contact) {
+        for (int i = 0; i < 50; i++)
         mContactsList.add(contact);
 
-        for (int i = 0; i < 100; i++) {
-
-            ContactInfo info = new ContactInfo("name", "value", contact);
+        for (int i = 0; i < 50; i++) {
+            ContactInfo info = new ContactInfo("pin to phone", "7547", contact);
             contact.save();
             info.save();
         }
