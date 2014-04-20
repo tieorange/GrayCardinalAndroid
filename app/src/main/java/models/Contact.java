@@ -2,42 +2,60 @@ package models;
 
 import android.graphics.Bitmap;
 
-import java.util.ArrayList;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
+
 import java.util.List;
 
-public class Contact {
+@Table(name = "Contacts")
+public class Contact extends Model {
+    @Column(name = "Name", onDelete = Column.ForeignKeyAction.CASCADE)
     private String name;
+    @Column(name = "Photo")
     private Bitmap photo;
-    private List<ContactInfo> infoList;
+
+
+    public Contact() {
+        super();
+    }
 
     public Contact(String name) {
+        super();
         this.name = name;
-        this.infoList = new ArrayList<ContactInfo>();
+        //this.infoList();
     }
 
     public Contact(String name, Bitmap photo) {
+        super();
         this.name = name;
         this.photo = photo;
-        this.infoList = new ArrayList<ContactInfo>();
+        //this.infoList = new ArrayList<ContactInfo>();
     }
 
+
     public Contact(String name, Bitmap photo, List<ContactInfo> infoList) {
+        super();
         this.name = name;
         this.photo = photo;
-        this.infoList = infoList;
+        //this.infoList = infoList;
     }
 
     public Contact(String name, List<ContactInfo> infoList) {
+        super();
         this.name = name;
-        this.infoList = infoList;
+        //this.infoList = infoList;
     }
 
-    public List<ContactInfo> getInfoList() {
-        return infoList;
+    public static Contact getFirst() {
+        return new Select()
+                .from(Contact.class)
+                .executeSingle();
     }
 
-    public void setInfoList(List<ContactInfo> infoList) {
-        this.infoList = infoList;
+    public List<ContactInfo> infoList() {
+        return getMany(ContactInfo.class, "Contact");
     }
 
     public String getName() {

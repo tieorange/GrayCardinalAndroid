@@ -1,9 +1,10 @@
 package application;
 
-import android.app.Application;
 import android.content.Context;
 
-public class GrayCardinalApplication extends Application {
+import com.activeandroid.ActiveAndroid;
+
+public class GrayCardinalApplication extends com.activeandroid.app.Application {
     private static Context mContext;
 
     public static Context getContext() {
@@ -19,5 +20,13 @@ public class GrayCardinalApplication extends Application {
     public void onCreate() {
         super.onCreate();
         GrayCardinalApplication.mContext = getApplicationContext();
+        ActiveAndroid.initialize(this);
+        ActiveAndroid.getDatabase().execSQL("PRAGMA foreign_keys=ON");
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        ActiveAndroid.dispose();
     }
 }
