@@ -70,9 +70,9 @@ public class ContactsAdapter extends BaseAdapter {
 
             Bitmap photo = mContact.get(position).getPhoto();
             if (photo == null) {
-                viewHolder.photo.setVisibility(View.GONE);
+                //viewHolder.photo.setVisibility(View.GONE);
             } else {
-                viewHolder.photo.setVisibility(View.VISIBLE);
+                //viewHolder.photo.setVisibility(View.VISIBLE);
                 viewHolder.photo.setImageBitmap(photo);
             }
         }

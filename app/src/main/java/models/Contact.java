@@ -10,7 +10,7 @@ import com.activeandroid.query.Select;
 import java.util.List;
 
 @Table(name = "Contacts")
-public class Contact extends Model {
+public class Contact extends Model{
     @Column(name = "Name", onDelete = Column.ForeignKeyAction.CASCADE)
     private String name;
     @Column(name = "Photo")
@@ -73,4 +73,6 @@ public class Contact extends Model {
     public void setPhoto(Bitmap photo) {
         this.photo = photo;
     }
+
+
 }

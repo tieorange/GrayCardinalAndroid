@@ -5,7 +5,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
 @Table(name = "ContactsInfo")
-public class ContactInfo extends Model {
+public class ContactInfo extends Model{
     @Column(name = "Contact", onDelete = Column.ForeignKeyAction.CASCADE)
     public Contact contact;
     @Column(name = "Name")

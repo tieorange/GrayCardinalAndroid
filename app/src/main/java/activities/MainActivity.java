@@ -12,8 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.activeandroid.query.Select;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.tieorange.graycardinal.app.R;
 
@@ -56,6 +56,7 @@ public class MainActivity extends ActionBarActivity {
     private void initViews() {
         mUiMyListView = (ListView) findViewById(R.id.main_contacts_list);
 
+        mContactsList = new Select().from(Contact.class).execute();
         mContactsAdapter = new ContactsAdapter(this, mContactsList);
 
         ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mContactsAdapter);
@@ -67,8 +68,9 @@ public class MainActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> adapter, View view, int position, long arg) {
                 Contact selectedItem = (Contact) adapter.getAdapter().getItem(position);
 
-                String content = selectedItem.infoList().get(0).getContent();
-                Toast.makeText(MainActivity.this, content, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(view.getContext(), InfoActivity.class);
+                intent.putExtra(Constants.EXTRAS_CONTACT, selectedItem.getId());
+                startActivity(intent);
 
             }
         });
@@ -91,8 +93,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void addContactToList(Contact contact) {
-        for (int i = 0; i < 50; i++)
-            mContactsList.add(contact);
+        mContactsList.add(contact);
 
         ContactInfo info = new ContactInfo("name", "value", contact);
         contact.save();
