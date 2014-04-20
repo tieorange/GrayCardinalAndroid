@@ -7,6 +7,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
+import java.util.Collections;
 import java.util.List;
 
 @Table(name = "Contacts")
@@ -51,7 +52,10 @@ public class Contact extends Model {
     }
 
     public List<ContactInfo> infoList() {
-        return getMany(ContactInfo.class, "Contact");
+        List<ContactInfo> contacts = getMany(ContactInfo.class, "Contact");
+        Collections.reverse(contacts);
+        return contacts;
+
     }
 
     public String getName() {
