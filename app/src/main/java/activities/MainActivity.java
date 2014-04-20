@@ -95,9 +95,13 @@ public class MainActivity extends ActionBarActivity {
     private void addContactToList(Contact contact) {
         mContactsList.add(contact);
 
-        ContactInfo info = new ContactInfo("name", "value", contact);
-        contact.save();
-        info.save();
+        for (int i = 0; i < 100; i++) {
+
+            ContactInfo info = new ContactInfo("name", "value", contact);
+            contact.save();
+            info.save();
+        }
+
 
         mContactsAdapter.notifyDataSetChanged();
     }

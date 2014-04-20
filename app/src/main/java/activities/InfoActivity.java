@@ -4,15 +4,21 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
+import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.tieorange.graycardinal.app.R;
 
+import adapters.InfoAdapter;
 import application.Constants;
 import models.Contact;
 
 
 public class InfoActivity extends ActionBarActivity {
     private Contact mContact;
+
+    private ListView mUiInfoListView;
+    private InfoAdapter mInfoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +30,17 @@ public class InfoActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //TODO mock
         getSupportActionBar().setTitle(mContact.getName());
+
+
+
+        mUiInfoListView = (ListView) findViewById(R.id.activity_info_listView);
+
+
+        mInfoAdapter = new InfoAdapter(this, mContact.infoList());
+
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mInfoAdapter);
+        scaleInAnimationAdapter.setAbsListView(mUiInfoListView);
+        mUiInfoListView.setAdapter(scaleInAnimationAdapter);
     }
 
     private void getExtras(Bundle savedInstanceState) {
@@ -32,7 +49,7 @@ public class InfoActivity extends ActionBarActivity {
             if (extras == null) {
                 mContact = null;
             } else {
-                Long id =  extras.getLong(Constants.EXTRAS_CONTACT);
+                Long id = extras.getLong(Constants.EXTRAS_CONTACT);
                 mContact = Contact.load(Contact.class, id);
             }
         } else {
@@ -44,7 +61,7 @@ public class InfoActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.info, menu);
         return true;

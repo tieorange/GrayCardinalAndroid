@@ -10,23 +10,23 @@ public class ContactInfo extends Model{
     public Contact contact;
     @Column(name = "Name")
     private String name;
-    @Column(name = "content")
-    private String content;
+    @Column(name = "Value")
+    private String value;
 
     public ContactInfo() {
         super();
     }
 
-    public ContactInfo(String name, String content) {
+    public ContactInfo(String name, String value) {
         super();
         this.name = name;
-        this.content = content;
+        this.value = value;
     }
 
-    public ContactInfo(String name, String content, Contact contact) {
+    public ContactInfo(String name, String value, Contact contact) {
         this.contact = contact;
         this.name = name;
-        this.content = content;
+        this.value = value;
     }
 
     public String getName() {
@@ -37,11 +37,11 @@ public class ContactInfo extends Model{
         this.name = name;
     }
 
-    public String getContent() {
-        return content;
+    public String getValue() {
+        return value;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setValue(String value) {
+        this.value = value;
     }
 }
