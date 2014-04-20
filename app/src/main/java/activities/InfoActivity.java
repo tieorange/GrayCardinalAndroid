@@ -49,11 +49,11 @@ public class InfoActivity extends ActionBarActivity {
             if (extras == null) {
                 mContact = null;
             } else {
-                Long id = extras.getLong(Constants.EXTRAS_CONTACT);
+                Long id = extras.getLong(Constants.EXTRAS_CONTACT_ID);
                 mContact = Contact.load(Contact.class, id);
             }
         } else {
-            Long id = savedInstanceState.getLong(Constants.EXTRAS_CONTACT);
+            Long id = savedInstanceState.getLong(Constants.EXTRAS_CONTACT_ID);
             mContact = Contact.load(Contact.class, id);
         }
     }

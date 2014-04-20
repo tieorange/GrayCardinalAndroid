@@ -4,8 +4,8 @@
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@android:color/darker_gray"
+    android:paddingBottom="10dp"
     tools:context="activities.InfoActivity">
 
 
@@ -14,6 +14,11 @@
         android:layout_height="match_parent"
         android:id="@+id/activity_info_listView"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        android:divider="@null"
+        android:dividerHeight="@dimen/distance_between_contact_rows"
+        android:layout_alignParentEnd="true"
+        android:paddingTop="@dimen/distance_between_contact_rows"
+        android:scrollbarStyle="outsideOverlay" />
 </RelativeLayout>

@@ -69,7 +69,7 @@ public class MainActivity extends ActionBarActivity {
                 Contact selectedItem = (Contact) adapter.getAdapter().getItem(position);
 
                 Intent intent = new Intent(view.getContext(), InfoActivity.class);
-                intent.putExtra(Constants.EXTRAS_CONTACT, selectedItem.getId());
+                intent.putExtra(Constants.EXTRAS_CONTACT_ID, selectedItem.getId());
                 startActivity(intent);
 
             }
@@ -93,7 +93,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void addContactToList(Contact contact) {
-        for (int i = 0; i < 50; i++)
+        // for (int i = 0; i < 50; i++)
         mContactsList.add(contact);
 
         for (int i = 0; i < 50; i++) {
@@ -101,8 +101,6 @@ public class MainActivity extends ActionBarActivity {
             contact.save();
             info.save();
         }
-
-
         mContactsAdapter.notifyDataSetChanged();
     }
 

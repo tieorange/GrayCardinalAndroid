@@ -5,7 +5,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:background="@android:color/darker_gray"
-    tools:context="activities.MainActivity" android:paddingBottom="10dp">
+    tools:context="activities.MainActivity"
+    android:paddingBottom="10dp">
 
 
     <ListView
