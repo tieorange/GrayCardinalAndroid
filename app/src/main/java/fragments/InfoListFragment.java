@@ -43,25 +43,16 @@ import models.ContactInfo;
 import tools.popupmenu.MenuItem;
 import tools.popupmenu.PopupMenu;
 
-public class BottomFragment extends ListFragment implements PopupMenu.OnItemSelectedListener {
+public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSelectedListener {
 
+    public static InfoAdapter mInfoAdapter;
     private QuickReturnListView mListView;
     private Button mQuickReturnView;
     private int mQuickReturnHeight;
-
-    private final static int EDIT_INFO = 0;
-    private final static int REMOVE_INFO = 1;
-    private final static int SEARCH = 2;
-
-    private static final int STATE_ONSCREEN = 0;
-    private static final int STATE_OFFSCREEN = 1;
-    private static final int STATE_RETURNING = 2;
-    private int mState = STATE_ONSCREEN;
+    private int mState = Constants.STATE_ONSCREEN;
     private int mScrollY;
     private int mMinRawY = 0;
-
     private TranslateAnimation anim;
-    public static InfoAdapter mInfoAdapter;
     private ContactInfo mSelectedItem;
 
     @Override
@@ -105,7 +96,7 @@ public class BottomFragment extends ListFragment implements PopupMenu.OnItemSele
 
 
         InfoActivity.mInfoList.add(0, info);
-        BottomFragment.mInfoAdapter.notifyDataSetChanged();
+        InfoListFragment.mInfoAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -118,9 +109,9 @@ public class BottomFragment extends ListFragment implements PopupMenu.OnItemSele
         // Set Listener
         menu.setOnItemSelectedListener(this);
         // Add Menu (Android menu like style)
-        menu.add(EDIT_INFO, R.string.edit_info).setIcon(
+        menu.add(Constants.EDIT_IN_POPUP, R.string.edit_info).setIcon(
                 getResources().getDrawable(R.drawable.ic_edit_info));
-        menu.add(REMOVE_INFO, R.string.remove_info).setIcon(
+        menu.add(Constants.REMOVE_IN_POPUP, R.string.remove_info).setIcon(
                 getResources().getDrawable(R.drawable.ic_remove_info));
         menu.show(v);
 
@@ -158,24 +149,24 @@ public class BottomFragment extends ListFragment implements PopupMenu.OnItemSele
                 int rawY = mScrollY;
 
                 switch (mState) {
-                    case STATE_OFFSCREEN:
+                    case Constants.STATE_OFFSCREEN:
                         if (rawY >= mMinRawY) {
                             mMinRawY = rawY;
                         } else {
-                            mState = STATE_RETURNING;
+                            mState = Constants.STATE_RETURNING;
                         }
                         translationY = rawY;
                         break;
 
-                    case STATE_ONSCREEN:
+                    case Constants.STATE_ONSCREEN:
                         if (rawY > mQuickReturnHeight) {
-                            mState = STATE_OFFSCREEN;
+                            mState = Constants.STATE_OFFSCREEN;
                             mMinRawY = rawY;
                         }
                         translationY = rawY;
                         break;
 
-                    case STATE_RETURNING:
+                    case Constants.STATE_RETURNING:
 
                         translationY = (rawY - mMinRawY) + mQuickReturnHeight;
 
@@ -186,12 +177,12 @@ public class BottomFragment extends ListFragment implements PopupMenu.OnItemSele
                         }
 
                         if (rawY == 0) {
-                            mState = STATE_ONSCREEN;
+                            mState = Constants.STATE_ONSCREEN;
                             translationY = 0;
                         }
 
                         if (translationY > mQuickReturnHeight) {
-                            mState = STATE_OFFSCREEN;
+                            mState = Constants.STATE_OFFSCREEN;
                             mMinRawY = rawY;
                         }
                         break;
@@ -229,14 +220,18 @@ public class BottomFragment extends ListFragment implements PopupMenu.OnItemSele
     @Override
     public void onItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case EDIT_INFO:
+            case Constants.EDIT_IN_POPUP:
                 break;
 
-            case REMOVE_INFO:
-                mSelectedItem.delete();
-                InfoActivity.mInfoList.remove(mSelectedItem);
-                mInfoAdapter.notifyDataSetChanged();
+            case Constants.REMOVE_IN_POPUP:
+                removeInfo();
                 break;
         }
+    }
+
+    private void removeInfo() {
+        mSelectedItem.delete();
+        mInfoAdapter.getList().remove(mSelectedItem);
+        mInfoAdapter.notifyDataSetChanged();
     }
 }

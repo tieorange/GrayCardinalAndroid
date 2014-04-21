@@ -15,28 +15,26 @@ import models.ContactInfo;
 
 
 public class InfoAdapter extends BaseAdapter {
-    private List<ContactInfo> mContactInfo;
+    private List<ContactInfo> mList;
     private LayoutInflater mInflater = null;
-
-    static class ViewHolder {
-        TextView name;
-        TextView value;
-    }
-
     public InfoAdapter(Context context, List<ContactInfo> items) {
-        this.mContactInfo = items;
+        this.mList = items;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }
 
+    public List<ContactInfo> getList() {
+        return mList;
+    }
+
     @Override
     public int getCount() {
-        return mContactInfo.size();
+        return mList.size();
     }
 
     @Override
     public ContactInfo getItem(int position) {
-        return mContactInfo.get(position);
+        return mList.get(position);
     }
 
     @Override
@@ -61,13 +59,18 @@ public class InfoAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        ContactInfo info = mContactInfo.get(position);
+        ContactInfo info = mList.get(position);
 
         if (info != null) {
-            viewHolder.name.setText(mContactInfo.get(position).getName());
-            viewHolder.value.setText(mContactInfo.get(position).getValue());
+            viewHolder.name.setText(mList.get(position).getName());
+            viewHolder.value.setText(mList.get(position).getValue());
         }
         return view;
+    }
+
+    static class ViewHolder {
+        TextView name;
+        TextView value;
     }
 
 }

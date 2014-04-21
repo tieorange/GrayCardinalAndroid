@@ -16,28 +16,26 @@ import models.Contact;
 
 
 public class ContactsAdapter extends BaseAdapter {
-    private List<Contact> mContact;
+    private List<Contact> mList;
     private LayoutInflater mInflater = null;
-
-    static class ViewHolder {
-        ImageView photo;
-        TextView name;
-    }
-
     public ContactsAdapter(Context context, List<Contact> item) {
-        this.mContact = item;
+        this.mList = item;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }
 
+    public List<Contact> getList() {
+        return mList;
+    }
+
     @Override
     public int getCount() {
-        return mContact.size();
+        return mList.size();
     }
 
     @Override
     public Contact getItem(int position) {
-        return mContact.get(position);
+        return mList.get(position);
     }
 
     @Override
@@ -62,12 +60,12 @@ public class ContactsAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        Contact friend = mContact.get(position);
+        Contact friend = mList.get(position);
 
         if (friend != null) {
-            viewHolder.name.setText(mContact.get(position).getName());
+            viewHolder.name.setText(mList.get(position).getName());
 
-           /* Bitmap photo = mContact.get(position).getPhoto();
+           /* Bitmap photo = mList.get(position).getPhoto();
             if (photo == null) {
                 //viewHolder.photo.setVisibility(View.GONE);
             } else {
@@ -76,6 +74,11 @@ public class ContactsAdapter extends BaseAdapter {
             }*/
         }
         return view;
+    }
+
+    static class ViewHolder {
+        ImageView photo;
+        TextView name;
     }
 
 }
