@@ -8,8 +8,9 @@
     android:paddingBottom="10dp"
     tools:context="activities.InfoActivity">
 
+<!--
 
-    <ListView
+     <ListView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/activity_info_listView"
@@ -21,4 +22,15 @@
         android:layout_alignParentEnd="true"
         android:paddingTop="@dimen/distance_between_contact_rows"
         android:scrollbarStyle="outsideOverlay" />
+-->
+
+    <fragment
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:name="fragments.BottomFragment"
+        android:id="@+id/fragment"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        tools:layout="@layout/footer_fragment" />
 </RelativeLayout>

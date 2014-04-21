@@ -5,15 +5,14 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 
-import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.tieorange.graycardinal.app.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import adapters.InfoAdapter;
 import application.Constants;
+import fragments.BottomFragment;
 import models.Contact;
 import models.ContactInfo;
 
@@ -21,14 +20,15 @@ import models.ContactInfo;
 public class InfoActivity extends ActionBarActivity {
     private Contact mContact;
 
-    private List<ContactInfo> mInfoList;
-    private ListView mUiInfoListView;
-    private InfoAdapter mInfoAdapter;
+    public static List<ContactInfo> mInfoList = new ArrayList<ContactInfo>();
+    //private ListView mUiInfoListView;
+    //private InfoAdapter mInfoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
+
         getExtras(savedInstanceState);
         initViews();
     }
@@ -39,11 +39,11 @@ public class InfoActivity extends ActionBarActivity {
 
         mInfoList = mContact.infoList();
 
-        mUiInfoListView = (ListView) findViewById(R.id.activity_info_listView);
+        /*mUiInfoListView = (ListView) findViewById(R.id.activity_info_listView);
         mInfoAdapter = new InfoAdapter(this, mInfoList);
         ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mInfoAdapter);
         scaleInAnimationAdapter.setAbsListView(mUiInfoListView);
-        mUiInfoListView.setAdapter(scaleInAnimationAdapter);
+        mUiInfoListView.setAdapter(scaleInAnimationAdapter);*/
     }
 
     private void getExtras(Bundle savedInstanceState) {
@@ -80,9 +80,8 @@ public class InfoActivity extends ActionBarActivity {
         info.save();
 
 
-
-        mInfoList.add(0,info);
-        mInfoAdapter.notifyDataSetChanged();
+        mInfoList.add(0, info);
+        BottomFragment.mInfoAdapter.notifyDataSetChanged();
     }
 
     @Override
