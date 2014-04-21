@@ -1,7 +1,5 @@
 package models;
 
-import android.graphics.Bitmap;
-
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -12,11 +10,10 @@ import java.util.List;
 
 @Table(name = "Contacts")
 public class Contact extends Model {
-    @Column(name = "Name", onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = "Name", onDelete = Column.ForeignKeyAction.CASCADE, notNull = true)
     private String name;
-    /*@Column(name = "Photo")
-    private Bitmap photo;*/
-
+    @Column(name = "PhotoPath")
+    private String photoPath;
 
     public Contact() {
         super();
@@ -27,17 +24,17 @@ public class Contact extends Model {
         this.name = name;
     }
 
-    public Contact(String name, Bitmap photo) {
+
+    public Contact(String name, String photo) {
         super();
         this.name = name;
-        //this.photo = photo;
+        this.photoPath = photo;
     }
 
-
-    public Contact(String name, Bitmap photo, List<ContactInfo> infoList) {
+    public Contact(String name, String photo, List<ContactInfo> infoList) {
         super();
         this.name = name;
-        //this.photo = photo;
+        this.photoPath = photo;
     }
 
     public Contact(String name, List<ContactInfo> infoList) {
@@ -49,6 +46,14 @@ public class Contact extends Model {
         return new Select()
                 .from(Contact.class)
                 .executeSingle();
+    }
+
+    public String getPhotoPath() {
+        return photoPath;
+    }
+
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
     }
 
     public List<ContactInfo> infoList() {

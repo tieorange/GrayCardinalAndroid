@@ -1,8 +1,12 @@
 package activities;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -18,6 +22,10 @@ import com.activeandroid.query.Select;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.tieorange.graycardinal.app.R;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +38,7 @@ import tools.popupmenu.PopupMenu;
 
 
 public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemSelectedListener {
+    public File DIRECTORY_IMAGES;
 
     private List<Contact> mContactsList = new ArrayList<Contact>();
     private ListView mUiContactsListView;
@@ -42,6 +51,15 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
         setContentView(R.layout.activity_main);
         initViews();
 
+        //write
+        String fileName = "12546";
+        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.ic_launcher);
+
+
+        saveBitmapToInternalSorage(bitmap, fileName);
+
+        Bitmap loadedBitmap = loadBitmapFromStorage(fileName);
 
      /*   Contact contact = new Contact("Andrii kovalchuk", BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
         contact.save();
@@ -52,12 +70,50 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
     }
 
+    private String saveBitmapToInternalSorage(Bitmap bitmapImage, String fileName) {
+
+        /*ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        // Create imageDir*/
+        File mypath = new File(DIRECTORY_IMAGES, fileName);
+
+        FileOutputStream fos = null;
+        try {
+
+            fos = new FileOutputStream(mypath);
+
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return DIRECTORY_IMAGES.getAbsolutePath();
+    }
+
+    private Bitmap loadBitmapFromStorage(String fileName) {
+
+        try {
+            File f = new File(DIRECTORY_IMAGES.getAbsolutePath(), fileName);
+            return BitmapFactory.decodeStream(new FileInputStream(f));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
     private void startContactsIntent() {
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         startActivityForResult(intent, Constants.PICK_CONTACT);
     }
 
     private void initViews() {
+
+        DIRECTORY_IMAGES = new ContextWrapper(this.getApplicationContext()).getDir(Constants.PHOTOS_DIR_NAME, Context.MODE_PRIVATE);
+
         mUiContactsListView = (ListView) findViewById(R.id.main_contacts_list);
 
         mContactsList = new Select().from(Contact.class).execute();

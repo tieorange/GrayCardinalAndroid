@@ -44,7 +44,8 @@ public class ContactsHelper {
             long id = Long.parseLong(c.getString(c.getColumnIndex(ContactsContract.Contacts._ID)));
             Bitmap contactPhoto = getContactPhoto(mainActivity, id);
 
-            return new Contact(name, contactPhoto);
+            //TODO mock
+            return new Contact(name, "photoPath/");
         } else
             return null;
     }

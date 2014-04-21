@@ -15,7 +15,7 @@
             android:value="CardinalDB7.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="2" />
+            android:value="3" />
 
         <activity
             android:name="activities.MainActivity"

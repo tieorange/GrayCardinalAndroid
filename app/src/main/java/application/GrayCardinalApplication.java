@@ -1,12 +1,14 @@
 package application;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 
 import com.activeandroid.ActiveAndroid;
 
+import java.io.File;
+
 public class GrayCardinalApplication extends com.activeandroid.app.Application {
     private static Context mContext;
-
     public static Context getContext() {
         return mContext;
     }
@@ -22,6 +24,7 @@ public class GrayCardinalApplication extends com.activeandroid.app.Application {
         GrayCardinalApplication.mContext = getApplicationContext();
         ActiveAndroid.initialize(this);
         ActiveAndroid.getDatabase().execSQL("PRAGMA foreign_keys=ON");
+
     }
 
     @Override
