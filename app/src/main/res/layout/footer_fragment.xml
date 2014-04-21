@@ -7,7 +7,7 @@
     <adapters.QuickReturnListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
@@ -19,18 +19,13 @@
 
     <Button
         android:id="@+id/footer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:background="#333333"
-        android:gravity="center"
         android:paddingBottom="8dip"
         android:paddingLeft="16dip"
         android:paddingRight="16dip"
-        android:paddingTop="8dip"
-        android:text="footer"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/primary_text_dark" />
+        android:paddingTop="8dip" android:drawableLeft="@drawable/ic_add_new_info_button"
+        android:text="Add new info"
+        style="@style/GreenButton" />
 
 </RelativeLayout>

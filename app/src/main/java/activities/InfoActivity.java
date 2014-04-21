@@ -1,6 +1,5 @@
 package activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -81,10 +80,10 @@ public class InfoActivity extends ActionBarActivity {
             case android.R.id.home:
                 this.finish();
                 break;
-            case R.id.action_add_info:
+            /*case R.id.action_add_info:
                 Intent intent = new Intent(InfoActivity.this, AddInfoActivity.class);
                 startActivityForResult(intent, Constants.REQUEST_CODE_ADD_INFO);
-                break;
+                break;*/
         }
         return super.onOptionsItemSelected(item);
     }
