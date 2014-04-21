@@ -118,9 +118,9 @@ public class BottomFragment extends ListFragment implements PopupMenu.OnItemSele
         menu.setOnItemSelectedListener(this);
         // Add Menu (Android menu like style)
         menu.add(PLAY_SELECTION, R.string.edit_info).setIcon(
-                getResources().getDrawable(R.drawable.ic_action_add_contact));
+                getResources().getDrawable(R.drawable.ic_edit_info));
         menu.add(ADD_TO_PLAYLIST, R.string.remove_info).setIcon(
-                getResources().getDrawable(R.drawable.ic_save_info_button));
+                getResources().getDrawable(R.drawable.ic_remove_info));
         menu.show(v);
 
     }
