@@ -2,26 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
+    android:background="@color/light_green_background"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     tools:context="activities.InfoActivity">
 
-    <!--
-
-         <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/activity_info_listView"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:clickable="true"
-            android:divider="@null"
-            android:dividerHeight="@dimen/distance_between_contact_rows"
-            android:layout_alignParentEnd="true"
-            android:paddingTop="@dimen/distance_between_contact_rows"
-            android:scrollbarStyle="outsideOverlay" />
-    -->
 
     <fragment
         android:id="@+id/fragment"

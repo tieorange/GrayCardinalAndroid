@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:background="@android:color/darker_gray"
+    android:background="@color/ligh_gray_backround"
     tools:context="activities.MainActivity"
     android:paddingBottom="10dp">
 
@@ -20,5 +19,5 @@
         android:dividerHeight="@dimen/distance_between_contact_rows"
         android:layout_alignParentEnd="true"
         android:paddingTop="@dimen/distance_between_contact_rows"
-        android:scrollbarStyle="outsideOverlay" />
+        android:scrollbarStyle="outsideInset" />
 </RelativeLayout>

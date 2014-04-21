@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="light_green_background">#D5F1DB</color>
+    <color name="ligh_gray_backround">#D1DDF0</color>
     <color name="LightGreenButton">#33CC66</color>
     <color name="White">#FFFFFF</color>
     <color name="Ivory">#FFFFF0</color>
