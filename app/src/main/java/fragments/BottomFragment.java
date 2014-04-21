@@ -43,34 +43,35 @@ import models.ContactInfo;
 import tools.popupmenu.MenuItem;
 import tools.popupmenu.PopupMenu;
 
-public class BottomFragment extends ListFragment implements PopupMenu.OnItemSelectedListener{
+public class BottomFragment extends ListFragment implements PopupMenu.OnItemSelectedListener {
 
-	private QuickReturnListView mListView;
-	private Button mQuickReturnView;
-	private int mQuickReturnHeight;
+    private QuickReturnListView mListView;
+    private Button mQuickReturnView;
+    private int mQuickReturnHeight;
 
-    private final static int PLAY_SELECTION = 0;
-    private final static int ADD_TO_PLAYLIST = 1;
+    private final static int EDIT_INFO = 0;
+    private final static int REMOVE_INFO = 1;
     private final static int SEARCH = 2;
 
-	private static final int STATE_ONSCREEN = 0;
-	private static final int STATE_OFFSCREEN = 1;
-	private static final int STATE_RETURNING = 2;
-	private int mState = STATE_ONSCREEN;
-	private int mScrollY;
-	private int mMinRawY = 0;
+    private static final int STATE_ONSCREEN = 0;
+    private static final int STATE_OFFSCREEN = 1;
+    private static final int STATE_RETURNING = 2;
+    private int mState = STATE_ONSCREEN;
+    private int mScrollY;
+    private int mMinRawY = 0;
 
-	private TranslateAnimation anim;
+    private TranslateAnimation anim;
     public static InfoAdapter mInfoAdapter;
+    private ContactInfo mSelectedItem;
 
     @Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.footer_fragment, null);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.footer_fragment, null);
         initViews(view);
 
-		return view;
-	}
+        return view;
+    }
 
     private void initViews(View view) {
         mQuickReturnView = (Button) view.findViewById(R.id.footer);
@@ -109,110 +110,111 @@ public class BottomFragment extends ListFragment implements PopupMenu.OnItemSele
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        ContactInfo selectedItem = (ContactInfo) l.getItemAtPosition(position);
+        mSelectedItem = (ContactInfo) l.getItemAtPosition(position);
 
         // Create Instance
         PopupMenu menu = new PopupMenu(getActivity());
-        menu.setHeaderTitle(selectedItem.getName());
+        menu.setHeaderTitle(mSelectedItem.getName());
         // Set Listener
         menu.setOnItemSelectedListener(this);
         // Add Menu (Android menu like style)
-        menu.add(PLAY_SELECTION, R.string.edit_info).setIcon(
+        menu.add(EDIT_INFO, R.string.edit_info).setIcon(
                 getResources().getDrawable(R.drawable.ic_edit_info));
-        menu.add(ADD_TO_PLAYLIST, R.string.remove_info).setIcon(
+        menu.add(REMOVE_INFO, R.string.remove_info).setIcon(
                 getResources().getDrawable(R.drawable.ic_remove_info));
         menu.show(v);
 
     }
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         setListApapter();
 
-                mListView.getViewTreeObserver().addOnGlobalLayoutListener(
-                        new ViewTreeObserver.OnGlobalLayoutListener() {
-                            @Override
-                            public void onGlobalLayout() {
-                                mQuickReturnHeight = mQuickReturnView.getHeight();
-                                mListView.computeScrollY();
-                            }
+        mListView.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        mQuickReturnHeight = mQuickReturnView.getHeight();
+                        mListView.computeScrollY();
+                    }
+                }
+        );
+
+        mListView.setOnScrollListener(new OnScrollListener() {
+            @SuppressLint("NewApi")
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                mScrollY = 0;
+                int translationY = 0;
+
+                if (mListView.scrollYIsComputed()) {
+                    mScrollY = mListView.getComputedScrollY();
+                }
+
+                int rawY = mScrollY;
+
+                switch (mState) {
+                    case STATE_OFFSCREEN:
+                        if (rawY >= mMinRawY) {
+                            mMinRawY = rawY;
+                        } else {
+                            mState = STATE_RETURNING;
                         }
-                );
+                        translationY = rawY;
+                        break;
 
-		mListView.setOnScrollListener(new OnScrollListener() {
-			@SuppressLint("NewApi")
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem,
-					int visibleItemCount, int totalItemCount) {
+                    case STATE_ONSCREEN:
+                        if (rawY > mQuickReturnHeight) {
+                            mState = STATE_OFFSCREEN;
+                            mMinRawY = rawY;
+                        }
+                        translationY = rawY;
+                        break;
 
-				mScrollY = 0;
-				int translationY = 0;
+                    case STATE_RETURNING:
 
-				if (mListView.scrollYIsComputed()) {
-					mScrollY = mListView.getComputedScrollY();
-				}
+                        translationY = (rawY - mMinRawY) + mQuickReturnHeight;
 
-				int rawY = mScrollY;
+                        System.out.println(translationY);
+                        if (translationY < 0) {
+                            translationY = 0;
+                            mMinRawY = rawY + mQuickReturnHeight;
+                        }
 
-				switch (mState) {
-				case STATE_OFFSCREEN:
-					if (rawY >= mMinRawY) {
-						mMinRawY = rawY;
-					} else {
-						mState = STATE_RETURNING;
-					}
-					translationY = rawY;
-					break;
+                        if (rawY == 0) {
+                            mState = STATE_ONSCREEN;
+                            translationY = 0;
+                        }
 
-				case STATE_ONSCREEN:
-					if (rawY > mQuickReturnHeight) {
-						mState = STATE_OFFSCREEN;
-						mMinRawY = rawY;
-					}
-					translationY = rawY;
-					break;
+                        if (translationY > mQuickReturnHeight) {
+                            mState = STATE_OFFSCREEN;
+                            mMinRawY = rawY;
+                        }
+                        break;
+                }
 
-				case STATE_RETURNING:
+                /** this can be used if the build is below honeycomb **/
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB) {
+                    anim = new TranslateAnimation(0, 0, translationY,
+                            translationY);
+                    anim.setFillAfter(true);
+                    anim.setDuration(0);
+                    mQuickReturnView.startAnimation(anim);
+                } else {
+                    mQuickReturnView.setTranslationY(translationY);
+                }
 
-					translationY = (rawY - mMinRawY) + mQuickReturnHeight;
+            }
 
-					System.out.println(translationY);
-					if (translationY < 0) {
-						translationY = 0;
-						mMinRawY = rawY + mQuickReturnHeight;
-					}
-
-					if (rawY == 0) {
-						mState = STATE_ONSCREEN;
-						translationY = 0;
-					}
-
-					if (translationY > mQuickReturnHeight) {
-						mState = STATE_OFFSCREEN;
-						mMinRawY = rawY;
-					}
-					break;
-				}
-
-				/** this can be used if the build is below honeycomb **/
-				if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB) {
-					anim = new TranslateAnimation(0, 0, translationY,
-							translationY);
-					anim.setFillAfter(true);
-					anim.setDuration(0);
-					mQuickReturnView.startAnimation(anim);
-				} else {
-					mQuickReturnView.setTranslationY(translationY);
-				}
-
-			}
-
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
-			}
-		});
-	}
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+        });
+    }
 
     private void setListApapter() {
         mListView = (QuickReturnListView) getListView();
@@ -224,9 +226,17 @@ public class BottomFragment extends ListFragment implements PopupMenu.OnItemSele
     }
 
 
-
     @Override
     public void onItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case EDIT_INFO:
+                break;
 
+            case REMOVE_INFO:
+                mSelectedItem.delete();
+                InfoActivity.mInfoList.remove(mSelectedItem);
+                mInfoAdapter.notifyDataSetChanged();
+                break;
+        }
     }
 }

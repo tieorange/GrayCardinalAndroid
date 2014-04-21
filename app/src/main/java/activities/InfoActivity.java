@@ -33,12 +33,6 @@ public class InfoActivity extends ActionBarActivity {
         getSupportActionBar().setTitle(mContact.getName());
 
         mInfoList = mContact.infoList();
-
-        /*mUiInfoListView = (ListView) findViewById(R.id.activity_info_listView);
-        mInfoAdapter = new InfoAdapter(this, mInfoList);
-        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mInfoAdapter);
-        scaleInAnimationAdapter.setAbsListView(mUiInfoListView);
-        mUiInfoListView.setAdapter(scaleInAnimationAdapter);*/
     }
 
     private void getExtras(Bundle savedInstanceState) {
