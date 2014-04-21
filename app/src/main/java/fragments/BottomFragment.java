@@ -33,8 +33,6 @@ import android.widget.ListView;
 
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.tieorange.graycardinal.app.R;
-import com.u1aryz.android.lib.newpopupmenu.MenuItem;
-import com.u1aryz.android.lib.newpopupmenu.PopupMenu;
 
 import activities.AddInfoActivity;
 import activities.InfoActivity;
@@ -42,9 +40,10 @@ import adapters.InfoAdapter;
 import adapters.QuickReturnListView;
 import application.Constants;
 import models.ContactInfo;
+import tools.popupmenu.MenuItem;
+import tools.popupmenu.PopupMenu;
 
-public class BottomFragment extends ListFragment implements
-        PopupMenu.OnItemSelectedListener {
+public class BottomFragment extends ListFragment implements PopupMenu.OnItemSelectedListener{
 
 	private QuickReturnListView mListView;
 	private Button mQuickReturnView;
@@ -69,6 +68,7 @@ public class BottomFragment extends ListFragment implements
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.footer_fragment, null);
         initViews(view);
+
 		return view;
 	}
 
@@ -109,10 +109,11 @@ public class BottomFragment extends ListFragment implements
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
+        ContactInfo selectedItem = (ContactInfo) l.getItemAtPosition(position);
+
         // Create Instance
         PopupMenu menu = new PopupMenu(getActivity());
-
-        menu.setHeaderTitle("TitleTitleTitleTitleTitleTitle");
+        menu.setHeaderTitle(selectedItem.getName());
         // Set Listener
         menu.setOnItemSelectedListener(this);
         // Add Menu (Android menu like style)
@@ -121,6 +122,7 @@ public class BottomFragment extends ListFragment implements
         menu.add(ADD_TO_PLAYLIST, R.string.remove_info).setIcon(
                 getResources().getDrawable(R.drawable.ic_save_info_button));
         menu.show(v);
+
     }
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -217,12 +219,14 @@ public class BottomFragment extends ListFragment implements
         mInfoAdapter = new InfoAdapter(getActivity(), InfoActivity.mInfoList);
 
         ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mInfoAdapter);
-        scaleInAnimationAdapter.setAbsListView(getListView());
-        setListAdapter(scaleInAnimationAdapter);
+        scaleInAnimationAdapter.setAbsListView(mListView);
+        mListView.setAdapter(scaleInAnimationAdapter);
     }
 
+
+
     @Override
-    public void onItemSelected(MenuItem menuItem) {
+    public void onItemSelected(MenuItem item) {
 
     }
 }

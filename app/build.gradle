@@ -26,5 +26,5 @@ dependencies {
     compile 'com.nhaarman.listviewanimations:library:2.6.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('libs/activeandroid-3.0.jar')
-    compile 'com.u1aryz:android-newpopupmenu-lib:1.0.1'
+    //compile 'com.u1aryz:android-newpopupmenu-lib:1.0.1'
 }
