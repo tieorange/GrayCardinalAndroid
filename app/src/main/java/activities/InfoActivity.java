@@ -12,17 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import application.Constants;
-import fragments.BottomFragment;
 import models.Contact;
 import models.ContactInfo;
 
 
 public class InfoActivity extends ActionBarActivity {
-    private Contact mContact;
-
+    public static Contact mContact;
     public static List<ContactInfo> mInfoList = new ArrayList<ContactInfo>();
-    //private ListView mUiInfoListView;
-    //private InfoAdapter mInfoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,28 +57,9 @@ public class InfoActivity extends ActionBarActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.REQUEST_CODE_ADD_INFO && resultCode == RESULT_OK && data != null) {
-            String infoName = data.getStringExtra(Constants.EXTRAS_INFO_NAME);
-            String infoValue = data.getStringExtra(Constants.EXTRAS_INFO_VALUE);
-
-            AddInfo(infoName, infoValue);
 
 
-        }
-    }
 
-    private void AddInfo(String infoName, String infoValue) {
-        ContactInfo info = new ContactInfo(infoName, infoValue, mContact);
-        mContact.save();
-        info.save();
-
-
-        mInfoList.add(0, info);
-        BottomFragment.mInfoAdapter.notifyDataSetChanged();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

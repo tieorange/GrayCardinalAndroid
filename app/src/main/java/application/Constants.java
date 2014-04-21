@@ -7,4 +7,5 @@ public class Constants {
     public static final String EXTRAS_INFO_VALUE = "InfoValue";
     public static final int REQUEST_CODE_ADD_INFO = 1;
 
+    public static final int DEVIDER_HEIGHT = 5*2;
 }

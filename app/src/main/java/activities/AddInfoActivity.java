@@ -49,13 +49,17 @@ public class AddInfoActivity extends ActionBarActivity {
                     output.putExtra(Constants.EXTRAS_INFO_VALUE, infoValue);
                     setResult(RESULT_OK, output);
 
-                    InputMethodManager imm = (InputMethodManager)getSystemService(
-                            Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mUiValue.getWindowToken(), 0);
+                    hideKeyboard();
                     finish();
                 }
             }
         });
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mUiValue.getWindowToken(), 0);
     }
 
     @Override

@@ -21,6 +21,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ListView;
 
+import application.Constants;
+
 public class QuickReturnListView extends ListView {
 
     private int mItemCount;
@@ -53,10 +55,10 @@ public class QuickReturnListView extends ListView {
                         MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                         MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
                 mItemOffsetY[i] = mHeight;
-                mHeight += view.getMeasuredHeight();
+                mHeight += view.getMeasuredHeight() + Constants.DEVIDER_HEIGHT;
                 System.out.println(mHeight);
             }
-        } catch (Exception ex) {
+        } catch (ArrayIndexOutOfBoundsException ex) {
 
         }
 

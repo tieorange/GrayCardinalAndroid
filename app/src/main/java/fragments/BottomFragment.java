@@ -16,6 +16,8 @@
 package fragments;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -26,19 +28,22 @@ import android.view.ViewTreeObserver;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.TextView;
+import android.widget.Button;
 
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.tieorange.graycardinal.app.R;
 
+import activities.AddInfoActivity;
 import activities.InfoActivity;
 import adapters.InfoAdapter;
 import adapters.QuickReturnListView;
+import application.Constants;
+import models.ContactInfo;
 
 public class BottomFragment extends ListFragment {
 
 	private QuickReturnListView mListView;
-	private TextView mQuickReturnView;
+	private Button mQuickReturnView;
 	private int mQuickReturnHeight;
 
 	private static final int STATE_ONSCREEN = 0;
@@ -55,10 +60,40 @@ public class BottomFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.footer_fragment, null);
-		mQuickReturnView = (TextView) view.findViewById(R.id.footer);
+		mQuickReturnView = (Button) view.findViewById(R.id.footer);
+
+        mQuickReturnView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddInfoActivity.class);
+                startActivityForResult(intent, Constants.REQUEST_CODE_ADD_INFO);
+            }
+        });
 		return view;
 	}
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQUEST_CODE_ADD_INFO && resultCode == Activity.RESULT_OK && data != null) {
+            String infoName = data.getStringExtra(Constants.EXTRAS_INFO_NAME);
+            String infoValue = data.getStringExtra(Constants.EXTRAS_INFO_VALUE);
+
+            AddInfo(infoName, infoValue);
+
+
+        }
+    }
+
+    private void AddInfo(String infoName, String infoValue) {
+        ContactInfo info = new ContactInfo(infoName, infoValue, InfoActivity.mContact);
+        InfoActivity.mContact.save();
+        info.save();
+
+
+        InfoActivity.mInfoList.add(0, info);
+        BottomFragment.mInfoAdapter.notifyDataSetChanged();
+    }
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
