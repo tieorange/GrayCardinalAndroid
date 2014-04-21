@@ -29,9 +29,12 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.tieorange.graycardinal.app.R;
+import com.u1aryz.android.lib.newpopupmenu.MenuItem;
+import com.u1aryz.android.lib.newpopupmenu.PopupMenu;
 
 import activities.AddInfoActivity;
 import activities.InfoActivity;
@@ -40,11 +43,16 @@ import adapters.QuickReturnListView;
 import application.Constants;
 import models.ContactInfo;
 
-public class BottomFragment extends ListFragment {
+public class BottomFragment extends ListFragment implements
+        PopupMenu.OnItemSelectedListener {
 
 	private QuickReturnListView mListView;
 	private Button mQuickReturnView;
 	private int mQuickReturnHeight;
+
+    private final static int PLAY_SELECTION = 0;
+    private final static int ADD_TO_PLAYLIST = 1;
+    private final static int SEARCH = 2;
 
 	private static final int STATE_ONSCREEN = 0;
 	private static final int STATE_OFFSCREEN = 1;
@@ -60,7 +68,12 @@ public class BottomFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.footer_fragment, null);
-		mQuickReturnView = (Button) view.findViewById(R.id.footer);
+        initViews(view);
+		return view;
+	}
+
+    private void initViews(View view) {
+        mQuickReturnView = (Button) view.findViewById(R.id.footer);
 
         mQuickReturnView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,8 +82,7 @@ public class BottomFragment extends ListFragment {
                 startActivityForResult(intent, Constants.REQUEST_CODE_ADD_INFO);
             }
         });
-		return view;
-	}
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -94,18 +106,27 @@ public class BottomFragment extends ListFragment {
         InfoActivity.mInfoList.add(0, info);
         BottomFragment.mInfoAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        // Create Instance
+        PopupMenu menu = new PopupMenu(getActivity());
+
+        menu.setHeaderTitle("TitleTitleTitleTitleTitleTitle");
+        // Set Listener
+        menu.setOnItemSelectedListener(this);
+        // Add Menu (Android menu like style)
+        menu.add(PLAY_SELECTION, R.string.edit_info).setIcon(
+                getResources().getDrawable(R.drawable.ic_action_add_contact));
+        menu.add(ADD_TO_PLAYLIST, R.string.remove_info).setIcon(
+                getResources().getDrawable(R.drawable.ic_save_info_button));
+        menu.show(v);
+    }
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		mListView = (QuickReturnListView) getListView();
-
-
-        mInfoAdapter = new InfoAdapter(getActivity(), InfoActivity.mInfoList);
-
-        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mInfoAdapter);
-        scaleInAnimationAdapter.setAbsListView(getListView());
-        setListAdapter(scaleInAnimationAdapter);
+        setListApapter();
 
                 mListView.getViewTreeObserver().addOnGlobalLayoutListener(
                         new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -190,4 +211,18 @@ public class BottomFragment extends ListFragment {
 			}
 		});
 	}
+
+    private void setListApapter() {
+        mListView = (QuickReturnListView) getListView();
+        mInfoAdapter = new InfoAdapter(getActivity(), InfoActivity.mInfoList);
+
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mInfoAdapter);
+        scaleInAnimationAdapter.setAbsListView(getListView());
+        setListAdapter(scaleInAnimationAdapter);
+    }
+
+    @Override
+    public void onItemSelected(MenuItem menuItem) {
+
+    }
 }

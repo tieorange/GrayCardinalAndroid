@@ -8,5 +8,6 @@
     <string name="title_activity_info">InfoActivity</string>
     <string name="title_activity_add_info">AddInfoActivity</string>
     <string name="add_new_info">Add new info</string>
-
+    <string name="edit_info">Edit</string>
+    <string name="remove_info">Remove</string>
 </resources>
