@@ -22,7 +22,6 @@ public class AddInfoActivity extends ActionBarActivity {
     private Button mUiAddInfo;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +56,7 @@ public class AddInfoActivity extends ActionBarActivity {
     }
 
     private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager)getSystemService(
+        InputMethodManager imm = (InputMethodManager) getSystemService(
                 Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mUiValue.getWindowToken(), 0);
     }
@@ -79,6 +78,9 @@ public class AddInfoActivity extends ActionBarActivity {
         switch (id) {
             case R.id.action_settings:
                 return true;
+            case android.R.id.home:
+                this.finish();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
