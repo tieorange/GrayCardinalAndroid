@@ -1,13 +1,11 @@
 package application;
 
-import android.content.Context;
-import android.content.ContextWrapper;
-
 import com.activeandroid.ActiveAndroid;
 
-import java.io.File;
+import android.app.Application;
+import android.content.Context;
 
-public class GrayCardinalApplication extends com.activeandroid.app.Application {
+public class GrayCardinalApplication extends Application {
     private static Context mContext;
     public static Context getContext() {
         return mContext;

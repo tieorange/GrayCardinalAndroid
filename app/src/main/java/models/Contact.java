@@ -12,9 +12,9 @@ import java.util.List;
 public class Contact extends Model {
     @Column(name = "Name", onDelete = Column.ForeignKeyAction.CASCADE, notNull = true)
     private String name;
-    /*@Column(name = "PhotoPath")
-    private String photoPath;
-*/
+    @Column(name = "PhotoPath")
+    private String photoName;
+
     public Contact() {
         super();
     }
@@ -28,13 +28,13 @@ public class Contact extends Model {
     public Contact(String name, String photo) {
         super();
         this.name = name;
-       // this.photoPath = photo;
+        this.photoName = photo;
     }
 
     public Contact(String name, String photo, List<ContactInfo> infoList) {
         super();
         this.name = name;
-       // this.photoPath = photo;
+        this.photoName = photo;
     }
 
     public Contact(String name, List<ContactInfo> infoList) {
@@ -65,4 +65,11 @@ public class Contact extends Model {
     }
 
 
+    public String getPhotoName() {
+        return photoName;
+    }
+
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
+    }
 }

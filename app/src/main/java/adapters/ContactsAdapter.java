@@ -1,6 +1,9 @@
 package adapters;
 
+import com.tieorange.graycardinal.app.R;
+
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,18 +11,20 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.tieorange.graycardinal.app.R;
-
 import java.util.List;
 
 import models.Contact;
+import tools.ContactsHelper;
 
 
 public class ContactsAdapter extends BaseAdapter {
     private List<Contact> mList;
     private LayoutInflater mInflater = null;
+    private Context mContext;
+
     public ContactsAdapter(Context context, List<Contact> item) {
         this.mList = item;
+        this.mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }
@@ -65,13 +70,13 @@ public class ContactsAdapter extends BaseAdapter {
         if (friend != null) {
             viewHolder.name.setText(mList.get(position).getName());
 
-           /* Bitmap photo = mList.get(position).getPhoto();
+            Bitmap photo = ContactsHelper.loadBitmapFromStorage(friend.getPhotoName(), mContext);
             if (photo == null) {
-                //viewHolder.photo.setVisibility(View.GONE);
+                viewHolder.photo.setVisibility(View.GONE);
             } else {
-                //viewHolder.photo.setVisibility(View.VISIBLE);
+                viewHolder.photo.setVisibility(View.VISIBLE);
                 viewHolder.photo.setImageBitmap(photo);
-            }*/
+           }
         }
         return view;
     }
