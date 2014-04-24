@@ -1,6 +1,5 @@
 package activities;
 
-import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.tieorange.graycardinal.app.R;
@@ -24,7 +23,6 @@ import java.util.List;
 import adapters.ContactsAdapter;
 import application.Constants;
 import models.Contact;
-import models.ContactInfo;
 import tools.ContactsHelper;
 import tools.popupmenu.PopupMenu;
 
@@ -113,24 +111,11 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
                     Uri contactData = data.getData();
 
                     Contact contact = ContactsHelper.getContact(this, contactData);
-                    addContactToList(contact);
+                    ContactsHelper.addContact(contact, mContactsAdapter);
                 }
                 break;
         }
     }
-
-    private void addContactToList(Contact contact) {
-        // for (int i = 0; i < 50; i++)
-        mContactsList.add(contact);
-
-        //for (int i = 0; i < 50; i++) {
-        ContactInfo info = new ContactInfo("pin to phone", "7547", contact);
-        contact.save();
-        info.save();
-        //}
-        mContactsAdapter.notifyDataSetChanged();
-    }
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -167,17 +152,10 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
                 break;
 
             case Constants.REMOVE_IN_POPUP:
-                removeContact();
+                ContactsHelper.removeContact(mLongClickedItem, mContactsAdapter);
                 break;
         }
     }
 
-    private void removeContact() {
-        mLongClickedItem.delete();
-        //cascade delete
-        new Delete().from(ContactInfo.class).where("Contact = ?", mLongClickedItem.getId())
-                .execute();
-        mContactsAdapter.getList().remove(mLongClickedItem);
-        mContactsAdapter.notifyDataSetChanged();
-    }
+
 }

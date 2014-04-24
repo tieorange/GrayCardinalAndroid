@@ -18,6 +18,7 @@ import tools.ContactsHelper;
 
 
 public class ContactsAdapter extends BaseAdapter {
+
     private List<Contact> mList;
     private LayoutInflater mInflater = null;
     private Context mContext;
@@ -27,6 +28,10 @@ public class ContactsAdapter extends BaseAdapter {
         this.mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+    }
+
+    public Context getContext() {
+        return mContext;
     }
 
     public List<Contact> getList() {
@@ -76,12 +81,13 @@ public class ContactsAdapter extends BaseAdapter {
             } else {
                 viewHolder.photo.setVisibility(View.VISIBLE);
                 viewHolder.photo.setImageBitmap(photo);
-           }
+            }
         }
         return view;
     }
 
     static class ViewHolder {
+
         ImageView photo;
         TextView name;
     }
