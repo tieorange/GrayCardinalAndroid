@@ -10,6 +10,7 @@ import java.util.List;
 
 @Table(name = "Contacts")
 public class Contact extends Model {
+
     @Column(name = "Name", onDelete = Column.ForeignKeyAction.CASCADE, notNull = true)
     private String name;
     @Column(name = "PhotoPath")
@@ -24,12 +25,12 @@ public class Contact extends Model {
         this.name = name;
     }
 
-
     public Contact(String name, String photo) {
         super();
         this.name = name;
         this.photoName = photo;
     }
+
 
     public Contact(String name, String photo, List<ContactInfo> infoList) {
         super();
@@ -48,6 +49,11 @@ public class Contact extends Model {
                 .executeSingle();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        //compare contacts by name (for avoiding duplication)
+        return new String(((Contact) obj).getName()).equals(this.getName());
+    }
 
     public List<ContactInfo> infoList() {
         List<ContactInfo> contacts = getMany(ContactInfo.class, "Contact");

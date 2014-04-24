@@ -19,9 +19,12 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Andrii Kovalchuk"
+            android:maxLength="45"
+            android:text="Andriik Kovalchuk Andrii Kovalchuk Andrii Kovalchu"
             android:textSize="20dp"
             android:layout_marginTop="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/list_raw_contact_photo"
             android:id="@+id/list_raw_contact_name"
             android:layout_centerInParent="@+id/list_raw_contact_photo"/>
 

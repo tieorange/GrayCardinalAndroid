@@ -114,8 +114,10 @@ public class ContactsHelper {
         contactsAdapter.notifyDataSetChanged();
     }
 
-    public static void addContact(Contact contact, ContactsAdapter contactsAdapter) {
+    public static boolean addContact(Contact contact, ContactsAdapter contactsAdapter) {
         // for (int i = 0; i < 50; i++)
+        if(contactsAdapter.getList().contains(contact))
+            return false;
         contactsAdapter.getList().add(contact);
 
         //for (int i = 0; i < 50; i++) {
@@ -124,6 +126,7 @@ public class ContactsHelper {
         info.save();
         //}
         contactsAdapter.notifyDataSetChanged();
+        return true;
     }
 
     public static void deleteBitmapFromStorage(String fileName, Context context) {

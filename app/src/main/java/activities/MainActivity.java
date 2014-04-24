@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +112,12 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
                     Uri contactData = data.getData();
 
                     Contact contact = ContactsHelper.getContact(this, contactData);
-                    ContactsHelper.addContact(contact, mContactsAdapter);
+
+                    if (!ContactsHelper.addContact(contact, mContactsAdapter)) {
+                        //avoid contact duplication
+                        Toast.makeText(this, R.string.contact_already_exist, Toast.LENGTH_SHORT)
+                                .show();
+                    }
                 }
                 break;
         }
