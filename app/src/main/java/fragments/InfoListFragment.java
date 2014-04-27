@@ -15,12 +15,16 @@
  */
 package fragments;
 
+import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
+import com.tieorange.graycardinal.app.R;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,9 +34,6 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.Button;
 import android.widget.ListView;
-
-import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
-import com.tieorange.graycardinal.app.R;
 
 import activities.AddInfoActivity;
 import activities.InfoActivity;
@@ -57,7 +58,7 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.footer_fragment, null);
         initViews(view);
 
@@ -79,7 +80,8 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.REQUEST_CODE_ADD_INFO && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == Constants.REQUEST_CODE_ADD_INFO && resultCode == Activity.RESULT_OK
+                && data != null) {
             String infoName = data.getStringExtra(Constants.EXTRAS_INFO_NAME);
             String infoValue = data.getStringExtra(Constants.EXTRAS_INFO_VALUE);
 
@@ -93,7 +95,6 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
         ContactInfo info = new ContactInfo(infoName, infoValue, InfoActivity.mContact);
         InfoActivity.mContact.save();
         info.save();
-
 
         InfoActivity.mInfoList.add(0, info);
         InfoListFragment.mInfoAdapter.notifyDataSetChanged();
@@ -121,7 +122,7 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setListApapter();
+        setListAdapter();
 
         mListView.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -137,13 +138,17 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
             @SuppressLint("NewApi")
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem,
-                                 int visibleItemCount, int totalItemCount) {
+                    int visibleItemCount, int totalItemCount) {
 
                 mScrollY = 0;
                 int translationY = 0;
 
-                if (mListView.scrollYIsComputed()) {
-                    mScrollY = mListView.getComputedScrollY();
+                try {
+                    if (mListView.scrollYIsComputed()) {
+                        mScrollY = mListView.getComputedScrollY();
+                    }
+                } catch (NullPointerException ex) {
+                    Log.e(InfoListFragment.class.getSimpleName(), ex.toString());
                 }
 
                 int rawY = mScrollY;
@@ -207,7 +212,7 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
         });
     }
 
-    private void setListApapter() {
+    private void setListAdapter() {
         mListView = (QuickReturnListView) getListView();
         mInfoAdapter = new InfoAdapter(getActivity(), InfoActivity.mInfoList);
 
