@@ -84,7 +84,6 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position,
                     long id) {
                 mLongClickedItem = (Contact) mUiContactsListView.getItemAtPosition(position);
-
                 // Create Instance
                 PopupMenu menu = new PopupMenu(MainActivity.this);
                 menu.setHeaderTitle(mLongClickedItem.getName());
