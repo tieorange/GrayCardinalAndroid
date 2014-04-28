@@ -1,11 +1,12 @@
 package activities;
 
+import com.tieorange.graycardinal.app.R;
+
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.tieorange.graycardinal.app.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,11 @@ import java.util.List;
 import application.Constants;
 import models.Contact;
 import models.ContactInfo;
+import tools.ContactsHelper;
 
 
 public class InfoActivity extends ActionBarActivity {
+
     public static Contact mContact;
     public static List<ContactInfo> mInfoList = new ArrayList<ContactInfo>();
 
@@ -31,8 +34,17 @@ public class InfoActivity extends ActionBarActivity {
     private void initViews() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(mContact.getName());
+        setContactPhotoToActionBar();
 
         mInfoList = mContact.infoList();
+    }
+
+    private void setContactPhotoToActionBar() {
+        BitmapDrawable contactPhotoDrawable = new BitmapDrawable(getResources(),
+                ContactsHelper.loadBitmapFromStorage(mContact.getPhotoName(), this));
+        if (contactPhotoDrawable.getBitmap() != null) {
+            getSupportActionBar().setIcon(contactPhotoDrawable);
+        }
     }
 
     private void getExtras(Bundle savedInstanceState) {
@@ -49,9 +61,6 @@ public class InfoActivity extends ActionBarActivity {
             mContact = Contact.load(Contact.class, id);
         }
     }
-
-
-
 
 
     @Override

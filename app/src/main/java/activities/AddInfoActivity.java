@@ -1,5 +1,7 @@
 package activities;
 
+import com.tieorange.graycardinal.app.R;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,13 +13,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.tieorange.graycardinal.app.R;
-
 import application.Constants;
-import models.Contact;
 
 public class AddInfoActivity extends ActionBarActivity {
-    private Contact mContact;
+
     private EditText mUiName, mUiValue;
     private Button mUiAddInfo;
 
@@ -31,7 +30,8 @@ public class AddInfoActivity extends ActionBarActivity {
 
     private void initViews() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("New Info"); //TODO mock
+        getSupportActionBar().setTitle("New Info"); //TODO mock;
+
 
         mUiName = (EditText) findViewById(R.id.add_info_name);
         mUiValue = (EditText) findViewById(R.id.add_info_value);
@@ -54,6 +54,8 @@ public class AddInfoActivity extends ActionBarActivity {
             }
         });
     }
+
+
 
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(
