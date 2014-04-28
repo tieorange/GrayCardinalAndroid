@@ -10,7 +10,9 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,7 +42,8 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-        mContactsAdapter.getFilter().filter(new String("hepner"));
+
+
      /*   Contact contact = new Contact("Andrii kovalchuk", BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
         contact.save();
 
@@ -58,6 +61,7 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
     private void initViews() {
 
+        
         mUiContactsListView = (ListView) findViewById(R.id.main_contacts_list);
 
         mContactsList = new Select().from(Contact.class).execute();
@@ -146,6 +150,23 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+
+        MenuItem searchMenuItem = menu.findItem(R.id.menu_buscar);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                mContactsAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+
         return true;
     }
 
