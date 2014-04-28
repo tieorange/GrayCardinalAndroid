@@ -116,8 +116,9 @@ public class ContactsHelper {
 
     public static boolean addContact(Contact contact, ContactsAdapter contactsAdapter) {
         // for (int i = 0; i < 50; i++)
-        if(contactsAdapter.getList().contains(contact))
+        if (contactsAdapter.getList().contains(contact)) {
             return false;
+        }
         contactsAdapter.getList().add(contact);
 
         //for (int i = 0; i < 50; i++) {
@@ -134,6 +135,11 @@ public class ContactsHelper {
                 .getDir(Constants.PHOTOS_DIR_NAME, Context.MODE_PRIVATE);
         File filePhoto = new File(DIRECTORY_IMAGES.getAbsolutePath(), fileName);
         filePhoto.delete();
+    }
+
+    public static int convertToPixels(int dps, Context context) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dps * scale + 0.5f);
     }
 
 }

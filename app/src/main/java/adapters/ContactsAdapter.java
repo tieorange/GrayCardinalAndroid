@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -64,6 +65,8 @@ public class ContactsAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             viewHolder.photo = (ImageView) view.findViewById(R.id.list_raw_contact_photo);
             viewHolder.name = (TextView) view.findViewById(R.id.list_raw_contact_name);
+            viewHolder.relativeLayout = (RelativeLayout) view
+                    .findViewById(R.id.list_raw_contact_relative_layout);
 
             view.setTag(viewHolder);
         } else {
@@ -76,18 +79,27 @@ public class ContactsAdapter extends BaseAdapter {
             viewHolder.name.setText(mList.get(position).getName());
 
             Bitmap photo = ContactsHelper.loadBitmapFromStorage(friend.getPhotoName(), mContext);
+
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewHolder.name
+                    .getLayoutParams();
+
             if (photo == null) {
                 viewHolder.photo.setVisibility(View.GONE);
+                params.setMargins(0, ContactsHelper.convertToPixels(10, mContext), 0, 0);
             } else {
                 viewHolder.photo.setVisibility(View.VISIBLE);
                 viewHolder.photo.setImageBitmap(photo);
+
+                params.setMargins(0, ContactsHelper.convertToPixels(20, mContext), 0, 0);
             }
+            viewHolder.name.setLayoutParams(params);
         }
         return view;
     }
 
     static class ViewHolder {
 
+        RelativeLayout relativeLayout;
         ImageView photo;
         TextView name;
     }
