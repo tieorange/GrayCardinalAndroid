@@ -40,7 +40,7 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-
+        mContactsAdapter.getFilter().filter(new String("hepner"));
      /*   Contact contact = new Contact("Andrii kovalchuk", BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
         contact.save();
 

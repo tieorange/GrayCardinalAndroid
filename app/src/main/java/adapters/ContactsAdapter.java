@@ -1,5 +1,6 @@
 package adapters;
 
+import com.nhaarman.listviewanimations.ArrayAdapter;
 import com.tieorange.graycardinal.app.R;
 
 import android.content.Context;
@@ -7,18 +8,19 @@ import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import models.Contact;
 import tools.ContactsHelper;
 
 
-public class ContactsAdapter extends BaseAdapter {
+public class ContactsAdapter extends ArrayAdapter {
 
     private List<Contact> mList;
     private LayoutInflater mInflater = null;
@@ -96,6 +98,49 @@ public class ContactsAdapter extends BaseAdapter {
         }
         return view;
     }
+
+
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults results = new FilterResults();
+                // We implement here the filter logic
+                if (constraint == null || constraint.length() == 0) {
+                    // No filter implemented we return all the list
+                    results.values = mList;
+                    results.count = mList.size();
+                } else {
+                    // We perform filtering operation
+                    List<Contact> nPlanetList = new ArrayList<Contact>();
+
+                    for (Contact p : mList) {
+                        if (p.getName().toUpperCase()
+                                .contains(constraint.toString().toUpperCase())) {
+                            nPlanetList.add(p);
+                        }
+                    }
+
+                    results.values = nPlanetList;
+                    results.count = nPlanetList.size();
+
+                }
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                // Now we have to inform the adapter about the new list filtered
+                if (results.count == 0) {
+                    notifyDataSetInvalidated();
+                } else {
+                    mList = (List<Contact>) results.values;
+                    notifyDataSetChanged();
+                }
+            }
+        };
+    }
+
 
     static class ViewHolder {
 
