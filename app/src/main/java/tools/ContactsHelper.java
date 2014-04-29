@@ -115,17 +115,18 @@ public class ContactsHelper {
     }
 
     public static boolean addContact(Contact contact, ContactsAdapter contactsAdapter) {
-        // for (int i = 0; i < 50; i++)
-        if (contactsAdapter.getList().contains(contact)) {
+
+       /* if (contactsAdapter.getList().contains(contact)) {
             return false;
-        }
+        }*/
+        for (int i = 0; i < 50; i++){
         contactsAdapter.getList().add(contact);
 
         // for (int i = 0; i < 1000; i++) {
         ContactInfo info = new ContactInfo("pin to phone", "7547", contact);
         contact.save();
         info.save();
-        // }
+        }
         contactsAdapter.notifyDataSetChanged();
         return true;
     }

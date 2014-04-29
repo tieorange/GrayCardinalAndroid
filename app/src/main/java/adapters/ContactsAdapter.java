@@ -107,7 +107,7 @@ public class ContactsAdapter extends ArrayAdapter {
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
                 // We implement here the filter logic
-                if (constraint == null || constraint.length() == 0 || constraint.toString()
+                if (constraint == null || constraint.toString()
                         .isEmpty()) {
                     // No filter implemented - we return all the list
                     //put the original list of contacts (prevent backspace bug)
@@ -118,7 +118,7 @@ public class ContactsAdapter extends ArrayAdapter {
                     // We perform filtering operation
                     List<Contact> nPlanetList = new ArrayList<Contact>();
 
-                    for (Contact p : mList) {
+                    for (Contact p : mListOriginal) {
                         if (p.getName().toUpperCase()
                                 .contains(constraint.toString().toUpperCase())) {
                             nPlanetList.add(p);
@@ -135,12 +135,9 @@ public class ContactsAdapter extends ArrayAdapter {
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 // Now we have to inform the adapter about the new list filtered
-                if (results.count == 0) {
-                    notifyDataSetInvalidated();
-                } else {
-                    mList = (List<Contact>) results.values;
-                    notifyDataSetChanged();
-                }
+                mList = (List<Contact>) results.values;
+                notifyDataSetChanged();
+
             }
         };
     }
