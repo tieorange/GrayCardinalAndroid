@@ -5,11 +5,12 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
 @Table(name = "Contacts")
-public class Contact extends Model {
+public class Contact extends Model implements Serializable {
 
     @Column(name = "Name", onDelete = Column.ForeignKeyAction.CASCADE, notNull = true)
     private String name;

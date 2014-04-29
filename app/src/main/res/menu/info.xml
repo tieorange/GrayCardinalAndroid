@@ -10,11 +10,19 @@
             android:icon="@drawable/abc_ic_search"
             app:showAsAction="always"
             android:title="@string/search"/>
+
+    <item
+            android:id="@+id/inf_menu_item_share"
+            android:showAsAction="ifRoom"
+            android:title="Share"
+            android:actionProviderClass=
+                    "android.widget.ShareActionProvider"/>
     <item
             android:id="@+id/action_settings"
             android:title="@string/action_settings"
             android:orderInCategory="100"
             app:showAsAction="never"/>
+
     <!--<item android:id="@+id/action_add_info"
         android:icon="@drawable/ic_action_add_contact"
         android:title="@string/add_new_info"
