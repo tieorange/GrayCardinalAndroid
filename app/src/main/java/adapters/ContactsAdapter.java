@@ -22,12 +22,13 @@ import tools.ContactsHelper;
 
 public class ContactsAdapter extends ArrayAdapter {
 
-    private List<Contact> mList;
+    private List<Contact> mList, mListOriginal;
     private LayoutInflater mInflater = null;
     private Context mContext;
 
     public ContactsAdapter(Context context, List<Contact> item) {
         this.mList = item;
+        this.mListOriginal = item;
         this.mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -106,8 +107,11 @@ public class ContactsAdapter extends ArrayAdapter {
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
                 // We implement here the filter logic
-                if (constraint == null || constraint.length() == 0) {
-                    // No filter implemented we return all the list
+                if (constraint == null || constraint.length() == 0 || constraint.toString()
+                        .isEmpty()) {
+                    // No filter implemented - we return all the list
+                    //put the original list of contacts (prevent backspace bug)
+                    mList = mListOriginal;
                     results.values = mList;
                     results.count = mList.size();
                 } else {

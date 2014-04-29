@@ -61,7 +61,6 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
     private void initViews() {
 
-        
         mUiContactsListView = (ListView) findViewById(R.id.main_contacts_list);
 
         mContactsList = new Select().from(Contact.class).execute();
@@ -151,9 +150,9 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
-
         MenuItem searchMenuItem = menu.findItem(R.id.menu_buscar);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
