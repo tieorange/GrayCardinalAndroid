@@ -139,7 +139,7 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
         /*if (id == R.id.action_settings) {
             return true;
         }*/
-        if (id == R.id.action_add_contact) {
+        if (id == R.id.main_menu_action_add_contact) {
             startContactsIntent();
         }
         return super.onOptionsItemSelected(item);
@@ -150,7 +150,7 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
-        MenuItem searchMenuItem = menu.findItem(R.id.menu_buscar);
+        MenuItem searchMenuItem = menu.findItem(R.id.main_menu_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

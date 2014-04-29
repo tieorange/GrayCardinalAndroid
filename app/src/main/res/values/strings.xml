@@ -11,4 +11,5 @@
     <string name="edit_info">Edit</string>
     <string name="remove_info">Remove</string>
     <string name="contact_already_exist">This contact is already added</string>
+    <string name="search">search</string>
 </resources>

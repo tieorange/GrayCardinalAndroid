@@ -9,14 +9,14 @@
         app:showAsAction="never" />-->
 
     <item
-            android:id="@+id/menu_buscar"
+            android:id="@+id/main_menu_search"
             app:actionViewClass="android.support.v7.widget.SearchView"
             android:icon="@drawable/abc_ic_search"
             app:showAsAction="always"
-            android:title="@string/abc_searchview_description_search"/>
+            android:title="@string/search"/>
 
     <item
-            android:id="@+id/action_add_contact"
+            android:id="@+id/main_menu_action_add_contact"
             android:icon="@drawable/ic_action_add_contact"
             android:title="@string/add_new_contact"
             app:showAsAction="ifRoom"/>

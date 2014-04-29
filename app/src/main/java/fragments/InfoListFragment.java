@@ -221,6 +221,14 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
         mListView.setAdapter(scaleInAnimationAdapter);
     }
 
+    /*@Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.info, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
+
+
+    }*/
 
     @Override
     public void onItemSelected(MenuItem item) {

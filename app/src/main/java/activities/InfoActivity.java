@@ -4,7 +4,9 @@ import com.tieorange.graycardinal.app.R;
 
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import application.Constants;
+import fragments.InfoListFragment;
 import models.Contact;
 import models.ContactInfo;
 import tools.ContactsHelper;
@@ -65,9 +68,24 @@ public class InfoActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.info, menu);
+
+        android.view.MenuItem searchMenuItem = menu.findItem(R.id.info_menu_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                InfoListFragment.mInfoAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
         return true;
     }
 

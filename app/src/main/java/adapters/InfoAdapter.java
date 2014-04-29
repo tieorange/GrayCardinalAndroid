@@ -1,24 +1,29 @@
 package adapters;
 
+import com.tieorange.graycardinal.app.R;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
 import android.widget.TextView;
 
-import com.tieorange.graycardinal.app.R;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import models.ContactInfo;
 
 
 public class InfoAdapter extends BaseAdapter {
-    private List<ContactInfo> mList;
+
+    private List<ContactInfo> mList, mListOriginal;
     private LayoutInflater mInflater = null;
+
     public InfoAdapter(Context context, List<ContactInfo> items) {
         this.mList = items;
+        this.mListOriginal = items;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }
@@ -68,7 +73,49 @@ public class InfoAdapter extends BaseAdapter {
         return view;
     }
 
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence filterString) {
+                FilterResults results = new FilterResults();
+                // We implement here the filter logic
+                if (filterString == null || filterString.toString()
+                        .isEmpty()) {
+                    // No filter implemented - we return all the list
+                    //put the original list of contacts (prevent backspace bug)
+                    mList = mListOriginal;
+                    results.values = mList;
+                    results.count = mList.size();
+                } else {
+                    // We perform filtering operation
+                    List<ContactInfo> contactInfoList = new ArrayList<ContactInfo>();
+
+                    for (ContactInfo p : mListOriginal) {
+                        if (p.getName().toUpperCase()
+                                .contains(filterString.toString().toUpperCase())
+                                || p.getValue().toUpperCase()
+                                .contains(filterString.toString().toUpperCase())) {
+                            contactInfoList.add(p);
+                        }
+                    }
+                    results.values = contactInfoList;
+                    results.count = contactInfoList.size();
+                }
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                // Now we have to inform the adapter about the new list filtered
+                mList = (List<ContactInfo>) results.values;
+                notifyDataSetChanged();
+
+            }
+        };
+    }
+
     static class ViewHolder {
+
         TextView name;
         TextView value;
     }

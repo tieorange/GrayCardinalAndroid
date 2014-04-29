@@ -104,10 +104,10 @@ public class ContactsAdapter extends ArrayAdapter {
     public Filter getFilter() {
         return new Filter() {
             @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
+            protected FilterResults performFiltering(CharSequence filterString) {
                 FilterResults results = new FilterResults();
                 // We implement here the filter logic
-                if (constraint == null || constraint.toString()
+                if (filterString == null || filterString.toString()
                         .isEmpty()) {
                     // No filter implemented - we return all the list
                     //put the original list of contacts (prevent backspace bug)
@@ -116,18 +116,16 @@ public class ContactsAdapter extends ArrayAdapter {
                     results.count = mList.size();
                 } else {
                     // We perform filtering operation
-                    List<Contact> nPlanetList = new ArrayList<Contact>();
+                    List<Contact> contactsList = new ArrayList<Contact>();
 
                     for (Contact p : mListOriginal) {
                         if (p.getName().toUpperCase()
-                                .contains(constraint.toString().toUpperCase())) {
-                            nPlanetList.add(p);
+                                .contains(filterString.toString().toUpperCase())) {
+                            contactsList.add(p);
                         }
                     }
-
-                    results.values = nPlanetList;
-                    results.count = nPlanetList.size();
-
+                    results.values = contactsList;
+                    results.count = contactsList.size();
                 }
                 return results;
             }
