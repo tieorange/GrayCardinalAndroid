@@ -16,17 +16,24 @@
 
 package adapters;
 
+import com.tieorange.graycardinal.app.R;
+
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
-import application.Constants;
+import java.util.ArrayList;
+import java.util.List;
+
+import tools.ContactsHelper;
 
 public class QuickReturnListView extends ListView {
 
+    private static String LOG_TAG = QuickReturnListView.class.getSimpleName();
     private int mItemCount;
-    private int mItemOffsetY[];
+    private List<Integer> mItemOffsetY = new ArrayList<Integer>();
     private boolean scrollIsComputed = false;
     private int mHeight;
 
@@ -45,23 +52,28 @@ public class QuickReturnListView extends ListView {
     public void computeScrollY() {
         mHeight = 0;
         mItemCount = getAdapter().getCount();
-        if (mItemOffsetY == null) {
-            mItemOffsetY = new int[mItemCount];
-        }
+        mItemOffsetY.clear();
+
         try {
-            for (int i = 0; i < mItemCount; ++i) {
-                View view = getAdapter().getView(i, null, this);
+            if (mItemCount > 0) {
+                View view = getAdapter().getView(0, null, this);
+                view.setLayoutParams(new LayoutParams(
+                        LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
                 view.measure(
                         MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                         MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-                mItemOffsetY[i] = mHeight;
-                mHeight += view.getMeasuredHeight() + Constants.DEVIDER_HEIGHT;
-                System.out.println(mHeight);
+                int viewMeasuredHeight = view.getMeasuredHeight();
+                for (int i = 0; i < mItemCount; i++) {
+                    mItemOffsetY.add(i, mHeight);
+                    mHeight += viewMeasuredHeight + ContactsHelper
+                            .convertToPixels(
+                                    (int) getResources().getDimension(R.dimen.devider_info),
+                                    getContext());
+                }
             }
-        } catch (ArrayIndexOutOfBoundsException ex) {
-
+        } catch (Exception ex) {
+            Log.e(LOG_TAG, ex.toString());
         }
-
         scrollIsComputed = true;
     }
 
@@ -75,7 +87,7 @@ public class QuickReturnListView extends ListView {
         pos = getFirstVisiblePosition();
         view = getChildAt(0);
         nItemY = view.getTop();
-        nScrollY = mItemOffsetY[pos] - nItemY;
+        nScrollY = mItemOffsetY.get(pos) - nItemY;
         return nScrollY;
     }
 }

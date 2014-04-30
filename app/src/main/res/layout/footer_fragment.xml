@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:clickable="true"
         android:divider="@null"
-        android:dividerHeight="5dp"
+        android:dividerHeight="@dimen/devider_info"
         android:paddingTop="@dimen/distance_between_contact_rows"
         android:scrollbarStyle="outsideInset" />
 
