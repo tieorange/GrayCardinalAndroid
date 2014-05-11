@@ -186,6 +186,9 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
                             translationY = 0;
                         }
 
+
+
+
                         if (translationY > mQuickReturnHeight) {
                             mState = Constants.STATE_OFFSCREEN;
                             mMinRawY = rawY;

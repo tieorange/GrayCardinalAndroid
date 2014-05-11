@@ -5,7 +5,8 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/row_selector" android:minHeight="80dp"
+                android:background="@drawable/row_selector"
+                android:minHeight="80dp"
                 android:padding="8dp">
 
     <ImageView

@@ -120,13 +120,15 @@ public class ContactsHelper {
        /* if (contactsAdapter.getList().contains(contact)) {
             return false;
         }*/
-        for (int i = 0; i < 50; i++){
-        contactsAdapter.getList().add(contact);
+        String contactName = contact.getName();
+        for (int i = 0; i < 1000; i++) {
+            contact.setName(i
+                    + " " + contactName);
+            contactsAdapter.getList().add(contact);
 
-        // for (int i = 0; i < 1000; i++) {
-        ContactInfo info = new ContactInfo("pin to phone", "7547", contact);
-        contact.save();
-        info.save();
+            ContactInfo info = new ContactInfo("pin to phone", Integer.toString(i), contact);
+            contact.save();
+            info.save();
         }
         contactsAdapter.notifyDataSetChanged();
         return true;
@@ -144,8 +146,7 @@ public class ContactsHelper {
         return (int) (dps * scale + 0.5f);
     }
 
-    public static void shareContact(Contact contact, Context context)
-    {
+    public static void shareContact(Contact contact, Context context) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, contact);
