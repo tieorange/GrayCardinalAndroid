@@ -121,7 +121,7 @@ public class ContactsHelper {
             return false;
         }*/
         String contactName = contact.getName();
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 50; i++) {
             contact.setName(i
                     + " " + contactName);
             contactsAdapter.getList().add(contact);

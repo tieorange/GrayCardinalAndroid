@@ -67,7 +67,7 @@ public class QuickReturnListView extends ListView {
                     mItemOffsetY.add(i, mHeight);
                     mHeight += viewMeasuredHeight + ContactsHelper
                             .convertToPixels(
-                                    (int) getResources().getDimension(R.dimen.devider_info),
+                                    (int) getResources().getDimension(R.dimen.divider_info),
                                     getContext());
                 }
             }

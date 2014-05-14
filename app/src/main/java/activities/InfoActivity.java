@@ -41,6 +41,8 @@ public class InfoActivity extends ActionBarActivity {
     private void initViews() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(mContact.getName());
+
+
         setContactPhotoToActionBar();
 
         mInfoList = mContact.infoList();
