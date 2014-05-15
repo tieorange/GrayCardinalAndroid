@@ -47,8 +47,8 @@ import tools.popupmenu.PopupMenu;
 public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSelectedListener {
 
     public static InfoAdapter mInfoAdapter;
-    private QuickReturnListView mListView;
-    private Button mQuickReturnView;
+    private QuickReturnListView mUiInfoListView;
+    private Button mUiAddInfo;
     private int mQuickReturnHeight;
     private int mState = Constants.STATE_ONSCREEN;
     private int mScrollY;
@@ -60,21 +60,22 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_info, null);
-        initViews(view);
 
         return view;
     }
 
     private void initViews(View view) {
-        mQuickReturnView = (Button) view.findViewById(R.id.footer);
+        mUiAddInfo = (Button) view.findViewById(R.id.footer);
 
-        mQuickReturnView.setOnClickListener(new View.OnClickListener() {
+        mUiAddInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AddInfoActivity.class);
                 startActivityForResult(intent, Constants.REQUEST_CODE_ADD_INFO);
             }
         });
+
+
     }
 
     @Override
@@ -122,19 +123,21 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        initViews(getView());
         setListAdapter();
+        //mUiInfoListView.addHeaderView(new View(getActivity()), null, true);
 
-        mListView.getViewTreeObserver().addOnGlobalLayoutListener(
+        mUiInfoListView.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
-                        mQuickReturnHeight = mQuickReturnView.getHeight();
-                        mListView.computeScrollY();
+                        mQuickReturnHeight = mUiAddInfo.getHeight();
+                        mUiInfoListView.computeScrollY();
                     }
                 }
         );
 
-        mListView.setOnScrollListener(new OnScrollListener() {
+        mUiInfoListView.setOnScrollListener(new OnScrollListener() {
             @SuppressLint("NewApi")
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem,
@@ -144,8 +147,8 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
                 int translationY = 0;
 
                 try {
-                    if (mListView.scrollYIsComputed()) {
-                        mScrollY = mListView.getComputedScrollY();
+                    if (mUiInfoListView.scrollYIsComputed()) {
+                        mScrollY = mUiInfoListView.getComputedScrollY();
                     }
                 } catch (NullPointerException ex) {
                     Log.e(InfoListFragment.class.getSimpleName(), ex.toString());
@@ -186,9 +189,6 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
                             translationY = 0;
                         }
 
-
-
-
                         if (translationY > mQuickReturnHeight) {
                             mState = Constants.STATE_OFFSCREEN;
                             mMinRawY = rawY;
@@ -202,9 +202,9 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
                             translationY);
                     anim.setFillAfter(true);
                     anim.setDuration(0);
-                    mQuickReturnView.startAnimation(anim);
+                    mUiAddInfo.startAnimation(anim);
                 } else {
-                    mQuickReturnView.setTranslationY(translationY);
+                    mUiAddInfo.setTranslationY(translationY);
                 }
 
             }
@@ -216,12 +216,12 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
     }
 
     private void setListAdapter() {
-        mListView = (QuickReturnListView) getListView();
+        mUiInfoListView = (QuickReturnListView) getListView();
         mInfoAdapter = new InfoAdapter(getActivity(), InfoActivity.mInfoList);
 
         ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mInfoAdapter);
-        scaleInAnimationAdapter.setAbsListView(mListView);
-        mListView.setAdapter(scaleInAnimationAdapter);
+        scaleInAnimationAdapter.setAbsListView(mUiInfoListView);
+        mUiInfoListView.setAdapter(scaleInAnimationAdapter);
     }
 
     /*@Override
