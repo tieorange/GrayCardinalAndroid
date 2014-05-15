@@ -9,12 +9,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_alignParentTop="true"
             android:clickable="true"
             android:divider="@null"
             android:dividerHeight="@dimen/divider_info"
-            android:scrollbarStyle="outsideInset"/>
+            android:scrollbarStyle="insideInset"/>
 
     <Button
             android:id="@+id/footer"

@@ -27,8 +27,6 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-import tools.ContactsHelper;
-
 public class QuickReturnListView extends ListView {
 
     private static String LOG_TAG = QuickReturnListView.class.getSimpleName();
@@ -63,12 +61,17 @@ public class QuickReturnListView extends ListView {
                         MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                         MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
                 int viewMeasuredHeight = view.getMeasuredHeight();
-                for (int i = 0; i < mItemCount; i++) {
+                /*int dividerHeight = ContactsHelper
+                        .convertToPixels(
+                                (int) getResources().getDimension(R.dimen.divider_info),
+                                getContext());*/
+                int dividerHeight = (int) getResources().getDimension(R.dimen.divider_info);
+
+                for (int i = 0; i < mItemCount; ++i) {
+
                     mItemOffsetY.add(i, mHeight);
-                    mHeight += viewMeasuredHeight + ContactsHelper
-                            .convertToPixels(
-                                    (int) getResources().getDimension(R.dimen.divider_info),
-                                    getContext());
+
+                    mHeight += viewMeasuredHeight + dividerHeight;
                 }
             }
         } catch (Exception ex) {
