@@ -5,7 +5,7 @@ import com.activeandroid.ActiveAndroid;
 import android.app.Application;
 import android.content.Context;
 
-public class GrayCardinalApplication extends Application {
+public class PemberApplication extends Application {
     private static Context mContext;
     public static Context getContext() {
         return mContext;
@@ -19,7 +19,7 @@ public class GrayCardinalApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        GrayCardinalApplication.mContext = getApplicationContext();
+        PemberApplication.mContext = getApplicationContext();
         ActiveAndroid.initialize(this);
         ActiveAndroid.getDatabase().execSQL("PRAGMA foreign_keys=ON");
 
