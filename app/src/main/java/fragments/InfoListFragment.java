@@ -18,7 +18,7 @@ package fragments;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.tieorange.graycardinal.app.R;
 
-import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
@@ -46,7 +46,7 @@ import tools.popupmenu.PopupMenu;
 
 public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSelectedListener {
 
-    public static InfoAdapter mInfoAdapter;
+    public static InfoAdapter mAdapter;
     private QuickReturnListView mUiInfoListView;
     private Button mUiAddInfo;
     private int mQuickReturnHeight;
@@ -98,7 +98,7 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
         info.save();
 
         InfoActivity.mInfoList.add(0, info);
-        InfoListFragment.mInfoAdapter.notifyDataSetChanged();
+        InfoListFragment.mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -125,7 +125,6 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
 
         initViews(getView());
         setListAdapter();
-        //mUiInfoListView.addHeaderView(new View(getActivity()), null, true);
 
         mUiInfoListView.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -138,7 +137,7 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
         );
 
         mUiInfoListView.setOnScrollListener(new OnScrollListener() {
-            @SuppressLint("NewApi")
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem,
                     int visibleItemCount, int totalItemCount) {
@@ -217,9 +216,9 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
 
     private void setListAdapter() {
         mUiInfoListView = (QuickReturnListView) getListView();
-        mInfoAdapter = new InfoAdapter(getActivity(), InfoActivity.mInfoList);
+        mAdapter = new InfoAdapter(getActivity(), InfoActivity.mInfoList);
 
-        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mInfoAdapter);
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mAdapter);
         scaleInAnimationAdapter.setAbsListView(mUiInfoListView);
         mUiInfoListView.setAdapter(scaleInAnimationAdapter);
     }
@@ -247,7 +246,7 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
 
     private void removeInfo() {
         mSelectedItem.delete();
-        mInfoAdapter.getList().remove(mSelectedItem);
-        mInfoAdapter.notifyDataSetChanged();
+        mAdapter.getList().remove(mSelectedItem);
+        mAdapter.notifyDataSetChanged();
     }
 }

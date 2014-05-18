@@ -2,9 +2,7 @@ package activities;
 
 import com.tieorange.graycardinal.app.R;
 
-import android.annotation.TargetApi;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -42,7 +40,6 @@ public class InfoActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(mContact.getName());
 
-
         setContactPhotoToActionBar();
 
         mInfoList = mContact.infoList();
@@ -72,7 +69,6 @@ public class InfoActivity extends ActionBarActivity {
     }
 
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -89,7 +85,7 @@ public class InfoActivity extends ActionBarActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                InfoListFragment.mInfoAdapter.getFilter().filter(s);
+                InfoListFragment.mAdapter.getFilter().filter(s);
                 return false;
             }
         });

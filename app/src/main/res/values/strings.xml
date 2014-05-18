@@ -13,6 +13,6 @@
     <string name="contact_already_exist">This contact is already added</string>
     <string name="search">search</string>
     <string name="add">Add</string>
-    <string name="info_value_hint">value (for ex. green)</string>
-    <string name="info_name_hint">Name (for ex. favorite color)</string>
+    <string name="info_value_hint"><i>Value (for ex. green)</i></string>
+    <string name="info_name_hint"><i>Name (for ex. favorite color) </i> </string>
 </resources>
