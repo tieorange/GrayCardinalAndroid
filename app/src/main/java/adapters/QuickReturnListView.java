@@ -16,7 +16,7 @@
 
 package adapters;
 
-import com.tieorange.graycardinal.app.R;
+import com.tieorange.pember.app.R;
 
 import android.content.Context;
 import android.util.AttributeSet;

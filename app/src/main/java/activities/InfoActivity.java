@@ -1,7 +1,9 @@
 package activities;
 
-import com.tieorange.graycardinal.app.R;
+import com.flurry.android.FlurryAgent;
+import com.tieorange.pember.app.R;
 
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -12,7 +14,9 @@ import android.view.MenuItem;
 import android.widget.ShareActionProvider;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import application.Constants;
 import fragments.InfoListFragment;
@@ -23,6 +27,7 @@ import tools.ContactsHelper;
 
 public class InfoActivity extends ActionBarActivity {
 
+    public static final String FLURRY_WATCH_INFO_ACTIVITY = "WatchInfo";
     public static Contact mContact;
     public static List<ContactInfo> mInfoList = new ArrayList<ContactInfo>();
     private ShareActionProvider mShareActionProvider;
@@ -37,6 +42,13 @@ public class InfoActivity extends ActionBarActivity {
     }
 
     private void initViews() {
+        //Flurry
+        Map<String, String> flurryParams = new HashMap<String, String>();
+
+        flurryParams.put("Name", mContact.getName());
+
+        FlurryAgent.logEvent(FLURRY_WATCH_INFO_ACTIVITY, flurryParams);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(mContact.getName());
 
@@ -51,6 +63,13 @@ public class InfoActivity extends ActionBarActivity {
         if (contactPhotoDrawable.getBitmap() != null) {
             getSupportActionBar().setIcon(contactPhotoDrawable);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // In a function that captures when a user navigates away from article
+        FlurryAgent.endTimedEvent(FLURRY_WATCH_INFO_ACTIVITY);
     }
 
     private void getExtras(Bundle savedInstanceState) {
@@ -91,18 +110,12 @@ public class InfoActivity extends ActionBarActivity {
         });
 
         //share
-        /*Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, mContact);
-        sendIntent.setType("file/GrayCardinalContact");
-        startActivity(sendIntent);
-
-        MenuItem item = menu.findItem(R.id.info_menu_search);// Fetch and store ShareActionProvider
+        /*MenuItem item = menu.findItem(R.id.info_menu_search);// Fetch and store ShareActionProvider
         mShareActionProvider = (ShareActionProvider) item.getActionProvider();
         if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(sendIntent);
-        }
-*/
+            mShareActionProvider.setShareIntent(shareIntent);
+        }*/
+
         return true;
     }
 
@@ -119,6 +132,16 @@ public class InfoActivity extends ActionBarActivity {
                 this.finish();
                 break;
             case R.id.inf_menu_item_share:
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SENDTO);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, mContact);
+                shareIntent.setType(getString(R.string.share_contact_type_intent));
+
+                // Verify the intent will resolve to at least one activity
+                if (shareIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(Intent.createChooser(shareIntent,
+                            getResources().getText(R.string.send_to)));
+                }
 
                 break;
             /*case R.id.action_add_info:

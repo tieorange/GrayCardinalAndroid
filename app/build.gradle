@@ -26,4 +26,5 @@ dependencies {
     compile 'com.nhaarman.listviewanimations:library:2.6.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('libs/activeandroid-3.0.jar')
+    compile files('libs/flurryAnalytics_3.4.0.jar')
 }

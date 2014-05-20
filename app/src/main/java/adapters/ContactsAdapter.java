@@ -1,7 +1,7 @@
 package adapters;
 
 import com.nhaarman.listviewanimations.ArrayAdapter;
-import com.tieorange.graycardinal.app.R;
+import com.tieorange.pember.app.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;

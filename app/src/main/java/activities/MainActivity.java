@@ -2,7 +2,7 @@ package activities;
 
 import com.activeandroid.query.Select;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
-import com.tieorange.graycardinal.app.R;
+import com.tieorange.pember.app.R;
 
 import android.app.Activity;
 import android.content.Intent;

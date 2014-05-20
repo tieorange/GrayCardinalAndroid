@@ -1,6 +1,6 @@
 package activities;
 
-import com.tieorange.graycardinal.app.R;
+import com.tieorange.pember.app.R;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import application.Constants;
+
 
 public class AddInfoActivity extends ActionBarActivity {
 
@@ -29,9 +30,9 @@ public class AddInfoActivity extends ActionBarActivity {
     }
 
     private void initViews() {
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("New Info"); //TODO mock;
-
 
         mUiName = (EditText) findViewById(R.id.add_info_name);
         mUiValue = (EditText) findViewById(R.id.add_info_value);
@@ -54,7 +55,6 @@ public class AddInfoActivity extends ActionBarActivity {
             }
         });
     }
-
 
 
     private void hideKeyboard() {

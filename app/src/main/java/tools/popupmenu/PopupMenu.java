@@ -1,5 +1,7 @@
 package tools.popupmenu;
 
+import com.tieorange.pember.app.R;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
@@ -19,8 +21,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
-import com.tieorange.graycardinal.app.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,8 +69,6 @@ public class PopupMenu {
 
     /**
      * Sets the popup's content.
-     *
-     * @param contentView
      */
     private void setContentView(View contentView) {
         mContentView = contentView;
@@ -82,10 +80,6 @@ public class PopupMenu {
 
     /**
      * Add menu item.
-     *
-     * @param itemId
-     * @param titleRes
-     * @param iconRes
      *
      * @return item
      */
@@ -107,13 +101,12 @@ public class PopupMenu {
 
     /**
      * Show popup menu.
-     *
-     * @param anchor
      */
     public void show(View anchor) {
 
         if (mItems.size() == 0) {
-            throw new IllegalStateException("PopupMenu#add was not called with a menu item to display.");
+            throw new IllegalStateException(
+                    "PopupMenu#add was not called with a menu item to display.");
         }
 
         preShow();
@@ -133,7 +126,7 @@ public class PopupMenu {
         });
 
         if (anchor == null) {
-            View parent = ((Activity)mContext).getWindow().getDecorView();
+            View parent = ((Activity) mContext).getWindow().getDecorView();
             mPopupWindow.showAtLocation(parent, Gravity.CENTER, 0, 0);
             return;
         }
@@ -146,7 +139,8 @@ public class PopupMenu {
                 location[0] + anchor.getWidth(),
                 location[0] + anchor.getHeight());
 
-        mContentView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        mContentView.setLayoutParams(
+                new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         mContentView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
         int rootHeight = mContentView.getMeasuredHeight();
@@ -181,7 +175,8 @@ public class PopupMenu {
         mPopupWindow.setFocusable(true);
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setAnimationStyle(android.R.style.Animation_Dialog);
-        mPopupWindow.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.panel_background));
+        mPopupWindow.setBackgroundDrawable(
+                mContext.getResources().getDrawable(R.drawable.panel_background));
     }
 
     /**
@@ -195,8 +190,6 @@ public class PopupMenu {
 
     /**
      * Sets the popup menu header's title.
-     *
-     * @param title
      */
     public void setHeaderTitle(CharSequence title) {
         mHeaderTitleView.setText(title);
@@ -206,32 +199,29 @@ public class PopupMenu {
 
     /**
      * Change the popup's width.
-     *
-     * @param width
      */
     public void setWidth(int width) {
         mWidth = width;
     }
 
     /**
-     * Register a callback to be invoked when an item in this PopupMenu has
-     * been selected.
-     *
-     * @param listener
+     * Register a callback to be invoked when an item in this PopupMenu has been selected.
      */
     public void setOnItemSelectedListener(OnItemSelectedListener listener) {
         mListener = listener;
     }
 
     /**
-     * Interface definition for a callback to be invoked when
-     * an item in this PopupMenu has been selected.
+     * Interface definition for a callback to be invoked when an item in this PopupMenu has been
+     * selected.
      */
     public interface OnItemSelectedListener {
+
         public void onItemSelected(MenuItem item);
     }
 
     static class ViewHolder {
+
         ImageView icon;
         TextView title;
     }
