@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.tieorange.pember.app.R;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -190,7 +191,7 @@ public class InfoActivity extends ActionBarActivity {
 */
                 File file = null;
                 try {
-                    file = createFile2(json);
+                    file = createFile2(json, this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -216,9 +217,9 @@ public class InfoActivity extends ActionBarActivity {
     }
 
     @TargetApi(Build.VERSION_CODES.FROYO)
-    public File createFile2(String text) throws IOException {
+    public File createFile2(String text, Context context) throws IOException {
         File file = new
-                File(getExternalCacheDir()
+                File(ContactsHelper.getExternalCacheDir(context)
                 + File.separator + "MyFile.txt");
 
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));

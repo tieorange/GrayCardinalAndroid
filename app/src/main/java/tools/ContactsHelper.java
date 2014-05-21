@@ -11,6 +11,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.provider.ContactsContract;
 
 import java.io.ByteArrayInputStream;
@@ -152,5 +154,16 @@ public class ContactsHelper {
         sendIntent.putExtra(Intent.EXTRA_TEXT, contact);
         sendIntent.setType("file/GrayCardinalContact");
         context.startActivity(sendIntent);
+    }
+
+    public static File getExternalCacheDir(final Context context) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ECLAIR_MR1) {
+            return context.getExternalCacheDir(); // >API level 8
+        }
+        // e.g. "<sdcard>/Android/data/<package_name>/cache/"
+        final File extCacheDir = new File(Environment.getExternalStorageDirectory(),
+                "/Android/data/" + context.getApplicationInfo().packageName + "/cache/");
+        extCacheDir.mkdirs();
+        return extCacheDir;
     }
 }
