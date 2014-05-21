@@ -18,4 +18,5 @@
     <string name="send_to">Send to</string>
     <string name="share_contact_type_intent">text/plain</string>
     <string name="extension_contact_file">.pember</string>
+    <string name="extension_manifest">.*\\.pember</string>
 </resources>
