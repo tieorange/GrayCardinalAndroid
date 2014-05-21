@@ -7,7 +7,7 @@ import com.activeandroid.annotation.Table;
 @Table(name = "ContactsInfo")
 public class ContactInfo extends Model {
 
-    @Column(name = "Contact", onDelete = Column.ForeignKeyAction.CASCADE, notNull = true,
+    @Column(name = "Contact", notNull = true,
             onNullConflict = Column.NullConflictAction.ABORT)
     public Contact contact;
     @Column(name = "Name")

@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "Contacts")
 public class Contact extends Model implements Serializable {
 
-    @Column(name = "Name", onDelete = Column.ForeignKeyAction.CASCADE, notNull = true)
+    @Column(name = "Name", notNull = true)
     private String name;
     @Column(name = "PhotoPath")
     private String photoName;

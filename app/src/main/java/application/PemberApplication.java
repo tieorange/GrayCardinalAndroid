@@ -1,7 +1,6 @@
 package application;
 
 import com.activeandroid.ActiveAndroid;
-import com.flurry.android.FlurryAgent;
 
 import android.app.Application;
 import android.content.Context;
@@ -24,8 +23,6 @@ public class PemberApplication extends Application {
         super.onCreate();
         PemberApplication.mContext = getApplicationContext();
 
-        FlurryAgent.onStartSession(this, Constants.FLURRY_API_KEY);
-
         ActiveAndroid.initialize(this);
         ActiveAndroid.getDatabase().execSQL("PRAGMA foreign_keys=ON");
 
@@ -35,6 +32,5 @@ public class PemberApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         ActiveAndroid.dispose();
-        FlurryAgent.onEndSession(this);
     }
 }

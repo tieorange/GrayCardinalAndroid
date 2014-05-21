@@ -16,5 +16,5 @@
     <string name="info_value_hint"><i>Value (for ex. green)</i></string>
     <string name="info_name_hint"><i>Name (for ex. favorite color) </i> </string>
     <string name="send_to">Send to</string>
-    <string name="share_contact_type_intent">file/*</string>
+    <string name="share_contact_type_intent">text/plain</string>
 </resources>
