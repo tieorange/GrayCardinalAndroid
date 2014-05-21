@@ -15,11 +15,14 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.ContactsContract;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 
 import adapters.ContactsAdapter;
 import application.Constants;
@@ -165,5 +168,23 @@ public class ContactsHelper {
                 "/Android/data/" + context.getApplicationInfo().packageName + "/cache/");
         extCacheDir.mkdirs();
         return extCacheDir;
+    }
+
+    public static String readPemberContactFile(File file) {
+//Read text from file
+        StringBuilder text = new StringBuilder();
+
+        String line;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                //text.append('\n');
+            }
+        } catch (IOException e) {
+            //You'll need to add proper error handling here
+        }
+        return String.valueOf(text);
     }
 }

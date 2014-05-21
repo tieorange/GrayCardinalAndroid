@@ -1,5 +1,7 @@
 package activities;
 
+import com.google.gson.Gson;
+
 import com.activeandroid.query.Select;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.tieorange.pember.app.R;
@@ -13,6 +15,7 @@ import android.provider.ContactsContract;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,18 +23,21 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import adapters.ContactsAdapter;
 import application.Constants;
 import models.Contact;
+import models.SerializableContact;
 import tools.ContactsHelper;
 import tools.popupmenu.PopupMenu;
 
 
 public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemSelectedListener {
 
+    public static final String LOG_TAG = MainActivity.class.getSimpleName();
     private List<Contact> mContactsList = new ArrayList<Contact>();
     private ListView mUiContactsListView;
     private ContactsAdapter mContactsAdapter;
@@ -49,11 +55,16 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
             if (data != null) {
 
+                Gson gsonContact = new Gson();
                 final String filePath = data.getEncodedPath();
+                File contactFile = new File(filePath);
+                String contactJson = ContactsHelper.readPemberContactFile(contactFile);
+                SerializableContact serializableContact = gsonContact
+                        .fromJson(contactJson, SerializableContact.class);
 
-                // file loading comes here.
-            } // if
-        } // if
+                Log.d(LOG_TAG, serializableContact.getContactName());
+            }
+        }
 
         return;
     }
@@ -64,7 +75,7 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
         setContentView(R.layout.activity_main);
         initViews();
 
-        final Uri data = getIntent().getData();
+
 
      /*   Contact contact = new Contact("Andrii kovalchuk", BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
         contact.save();

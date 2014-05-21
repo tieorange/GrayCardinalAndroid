@@ -18,13 +18,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ShareActionProvider;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -194,10 +192,8 @@ public class InfoActivity extends ActionBarActivity {
                     e.printStackTrace();
                 }
 
-                String s = readFile(file);
-                SerializableContact serializableContact = gsonContact
-                        .fromJson(s, SerializableContact.class);
-                Log.d(LOG_TAG, serializableContact.getContactName());
+
+
 
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
@@ -233,23 +229,6 @@ public class InfoActivity extends ActionBarActivity {
         return file;
     }
 
-    public String readFile(File file) {
-//Read text from file
-        StringBuilder text = new StringBuilder();
-
-        String line;
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-
-            while ((line = br.readLine()) != null) {
-                text.append(line);
-                //text.append('\n');
-            }
-        } catch (IOException e) {
-            //You'll need to add proper error handling here
-        }
-        return String.valueOf(text);
-    }
 
     public SerializableContact createSerialContact(Contact contact) {
         SerializableContact serialContact;
