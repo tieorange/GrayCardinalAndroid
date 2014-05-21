@@ -5,9 +5,13 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+
+import tools.ContactsHelper;
 
 @Table(name = "Contacts")
 public class Contact extends Model implements Serializable {
@@ -42,6 +46,18 @@ public class Contact extends Model implements Serializable {
     public Contact(String name, List<ContactInfo> infoList) {
         super();
         this.name = name;
+    }
+
+    public Contact(SerializableContact serializableContact) {
+        Bitmap contactPhotoBitmap = serializableContact.getContactPhoto();
+        String contactPhotoPath = ContactsHelper
+                .saveBitmapToInternalStorage(contactPhotoBitmap, this.name, getContext());
+        this.photoName = contactPhotoPath;
+
+        this.name = serializableContact.getContactName();
+
+        //TODO add contactInfo
+
     }
 
     public static Contact getFirst() {

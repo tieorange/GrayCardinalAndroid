@@ -120,10 +120,12 @@ public class ContactsHelper {
         contactsAdapter.notifyDataSetChanged();
     }
 
-    public static boolean addContact(Contact contact, ContactsAdapter contactsAdapter) {
+    public static void addContact(Contact contact, ContactsAdapter contactsAdapter) {
 
+        //avoiding of duplication
        /* if (contactsAdapter.getList().contains(contact)) {
-            return false;
+            Toast.makeText(this, R.string.contact_already_exist, Toast.LENGTH_SHORT)
+                                .show();
         }*/
         String contactName = contact.getName();
         for (int i = 0; i < 50; i++) {
@@ -136,7 +138,7 @@ public class ContactsHelper {
             info.save();
         }
         contactsAdapter.notifyDataSetChanged();
-        return true;
+
     }
 
     public static void deleteBitmapFromStorage(String fileName, Context context) {

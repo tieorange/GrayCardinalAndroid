@@ -15,13 +15,11 @@ import android.provider.ContactsContract;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -62,7 +60,8 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
                 SerializableContact serializableContact = gsonContact
                         .fromJson(contactJson, SerializableContact.class);
 
-                Log.d(LOG_TAG, serializableContact.getContactName());
+                Contact contact = new Contact(serializableContact);
+                ContactsHelper.addContact(contact, mContactsAdapter);
             }
         }
 
@@ -148,11 +147,8 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
                     Contact contact = ContactsHelper.getContact(this, contactData);
 
-                    if (!ContactsHelper.addContact(contact, mContactsAdapter)) {
-                        //avoid contact duplication
-                        Toast.makeText(this, R.string.contact_already_exist, Toast.LENGTH_SHORT)
-                                .show();
-                    }
+                    ContactsHelper.addContact(contact, mContactsAdapter);
+
                 }
                 break;
         }
