@@ -37,12 +37,34 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
     private ContactsAdapter mContactsAdapter;
     private Contact mLongClickedItem;
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        final android.content.Intent intent = getIntent();
+
+        if (intent != null) {
+
+            final android.net.Uri data = intent.getData();
+
+            if (data != null) {
+
+                final String filePath = data.getEncodedPath();
+
+                // file loading comes here.
+            } // if
+        } // if
+
+        return;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
 
+        final Uri data = getIntent().getData();
 
      /*   Contact contact = new Contact("Andrii kovalchuk", BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
         contact.save();

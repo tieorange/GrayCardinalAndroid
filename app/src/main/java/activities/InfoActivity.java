@@ -4,13 +4,11 @@ import com.google.gson.Gson;
 
 import com.tieorange.pember.app.R;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -20,20 +18,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ShareActionProvider;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import application.Constants;
 import fragments.InfoListFragment;
@@ -46,10 +44,52 @@ import tools.ContactsHelper;
 
 public class InfoActivity extends ActionBarActivity {
 
-    public static final String FLURRY_WATCH_INFO_ACTIVITY = "WatchInfo";
+    public static final String LOG_TAG = InfoActivity.class.getSimpleName();
     public static Contact mContact;
     public static List<ContactInfo> mInfoList = new ArrayList<ContactInfo>();
     private ShareActionProvider mShareActionProvider;
+
+    public static byte[] getSerializedObject(Serializable s) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = null;
+        String loggerTag = "Info";
+        try {
+            oos = new ObjectOutputStream(baos);
+            oos.writeObject(s);
+        } catch (IOException e) {
+            Log.e(loggerTag, e.getMessage(), e);
+            return null;
+        } finally {
+            try {
+                oos.close();
+            } catch (IOException e) {
+            }
+        }
+        byte[] result = baos.toByteArray();
+        Log.d(loggerTag,
+                "Object " + s.getClass().getSimpleName() + " written to byte[]: "
+                        + result.length
+        );
+        return result;
+    }
+
+    public static Object readSerializedObject(byte[] in) {
+        Object result = null;
+        ByteArrayInputStream bais = new ByteArrayInputStream(in);
+        ObjectInputStream ois = null;
+        try {
+            ois = new ObjectInputStream(bais);
+            result = ois.readObject();
+        } catch (Exception e) {
+            result = null;
+        } finally {
+            try {
+                ois.close();
+            } catch (Throwable e) {
+            }
+        }
+        return result;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +101,6 @@ public class InfoActivity extends ActionBarActivity {
     }
 
     private void initViews() {
-        //Flurry
-        Map<String, String> flurryParams = new HashMap<String, String>();
-
-        flurryParams.put("Name", mContact.getName());
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(mContact.getName());
 
@@ -103,7 +138,6 @@ public class InfoActivity extends ActionBarActivity {
             mContact = Contact.load(Contact.class, id);
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -149,52 +183,21 @@ public class InfoActivity extends ActionBarActivity {
                 this.finish();
                 break;
             case R.id.inf_menu_item_share:
+                Gson gsonContact = new Gson();
+                String jsonContact = gsonContact.toJson(createSerialContact(mContact));
+                Log.d(LOG_TAG, jsonContact);
 
-                /*//write file
-                File file = new File("contact.pember");
-                try {
-                    ObjectOutputStream oos = new ObjectOutputStream(
-                            new FileOutputStream(file)); //Select where you wish to save the file...
-                    oos.writeObject(mContact); // write the class as an 'object'
-                    oos.flush(); // flush the stream to insure all of the information was written to 'save.bin'
-                    oos.close();// close the stream
-                } catch (Exception ex) {
-                    Log.v("Address Book", ex.getMessage());
-                    ex.printStackTrace();
-                }
-
-                //read file
-                try
-                {
-                    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-                    Contact o = (Contact) ois.readObject();
-                    String name = o.getName();
-                }
-                catch(Exception ex)
-                {
-                    Log.v("Address Book",ex.getMessage());
-                    ex.printStackTrace();
-                }*/
-                Gson gson2 = new Gson();
-                String json = gson2.toJson(createSerialContact(mContact));
-                Log.d("InfoActivity", json);
-
-               /* Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(Contact.class, new GsonContactAdapter<Contact>())
-                        .create();
-                String json = gson.toJson(mContact);
-                Log.d("InfoActivity", json);*/
-
-               /* byte[] serializedObject = getSerializedObject(mContact);
-
-                File file = createFile(serializedObject);
-*/
                 File file = null;
                 try {
-                    file = createFile2(json, this);
+                    file = getCreatedSharedContactFile(jsonContact, this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
+                String s = readFile(file);
+                SerializableContact serializableContact = gsonContact
+                        .fromJson(s, SerializableContact.class);
+                Log.d(LOG_TAG, serializableContact.getContactName());
 
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
@@ -216,16 +219,36 @@ public class InfoActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @TargetApi(Build.VERSION_CODES.FROYO)
-    public File createFile2(String text, Context context) throws IOException {
+    public File getCreatedSharedContactFile(String text, Context context) throws IOException {
+        final String fileExtension = getString(R.string.extension_contact_file);
+        final String fileName = getString(R.string.app_name) + "SharedFile"
+                + fileExtension; //PemberSharedFile.pember
         File file = new
                 File(ContactsHelper.getExternalCacheDir(context)
-                + File.separator + "MyFile.txt");
+                + File.separator + fileName);
 
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
         bufferedWriter.write(text);
         bufferedWriter.close();
         return file;
+    }
+
+    public String readFile(File file) {
+//Read text from file
+        StringBuilder text = new StringBuilder();
+
+        String line;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                //text.append('\n');
+            }
+        } catch (IOException e) {
+            //You'll need to add proper error handling here
+        }
+        return String.valueOf(text);
     }
 
     public SerializableContact createSerialContact(Contact contact) {
@@ -265,48 +288,6 @@ public class InfoActivity extends ActionBarActivity {
             e.printStackTrace();
         }
         return secondFile;
-    }
-
-    public static byte[] getSerializedObject(Serializable s) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = null;
-        String loggerTag = "Info";
-        try {
-            oos = new ObjectOutputStream(baos);
-            oos.writeObject(s);
-        } catch (IOException e) {
-            Log.e(loggerTag, e.getMessage(), e);
-            return null;
-        } finally {
-            try {
-                oos.close();
-            } catch (IOException e) {
-            }
-        }
-        byte[] result = baos.toByteArray();
-        Log.d(loggerTag,
-                "Object " + s.getClass().getSimpleName() + " written to byte[]: "
-                        + result.length
-        );
-        return result;
-    }
-
-    public static Object readSerializedObject(byte[] in) {
-        Object result = null;
-        ByteArrayInputStream bais = new ByteArrayInputStream(in);
-        ObjectInputStream ois = null;
-        try {
-            ois = new ObjectInputStream(bais);
-            result = ois.readObject();
-        } catch (Exception e) {
-            result = null;
-        } finally {
-            try {
-                ois.close();
-            } catch (Throwable e) {
-            }
-        }
-        return result;
     }
 
 }
