@@ -12,8 +12,6 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-import tools.ContactsHelper;
-
 @Table(name = "Contacts")
 public class Contact extends Model implements Serializable {
 
@@ -53,11 +51,11 @@ public class Contact extends Model implements Serializable {
 
         this.name = serializableContact.getContactName();
 
-        Bitmap contactPhotoBitmap = serializableContact.getContactPhoto();
+        Bitmap contactPhotoBitmap = serializableContact.getContactPhoto();/*
         ContactsHelper
-                .saveBitmapToInternalStorage(contactPhotoBitmap, this.name, context);
+                .saveBitmapToInternalStorage(contactPhotoBitmap, this.name, context);*/
         //this.photoName = this.name;
-        this.photoName = this.name;
+        this.photoName = null;
 
 
     }
