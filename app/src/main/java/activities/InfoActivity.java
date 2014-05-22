@@ -108,6 +108,10 @@ public class InfoActivity extends ActionBarActivity {
     }
 
     private void setContactPhotoToActionBar() {
+        if (mContact.getPhotoName() == null) {
+            return;
+        }
+
         BitmapDrawable contactPhotoDrawable = new BitmapDrawable(getResources(),
                 ContactsHelper.loadBitmapFromStorage(mContact.getPhotoName(), this));
         if (contactPhotoDrawable.getBitmap() != null) {
@@ -191,9 +195,6 @@ public class InfoActivity extends ActionBarActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-
-
 
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);

@@ -111,11 +111,15 @@ public class ContactsHelper {
     }
 
     public static void removeContact(Contact longClickedItem, ContactsAdapter contactsAdapter) {
-        longClickedItem.delete();
-        deleteBitmapFromStorage(longClickedItem.getPhotoName(), contactsAdapter.getContext());
-        //cascade delete
+        //cascade delete of info
         new Delete().from(ContactInfo.class).where("Contact = ?", longClickedItem.getId())
                 .execute();
+
+        longClickedItem.delete();
+        if (longClickedItem.getPhotoName() != null) {
+            deleteBitmapFromStorage(longClickedItem.getPhotoName(), contactsAdapter.getContext());
+        }
+
         contactsAdapter.getList().remove(longClickedItem);
         contactsAdapter.notifyDataSetChanged();
     }

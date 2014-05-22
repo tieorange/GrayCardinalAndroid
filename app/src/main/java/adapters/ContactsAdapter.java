@@ -81,15 +81,16 @@ public class ContactsAdapter extends ArrayAdapter {
         if (friend != null) {
             viewHolder.name.setText(mList.get(position).getName());
 
-            Bitmap photo = ContactsHelper.loadBitmapFromStorage(friend.getPhotoName(), mContext);
-
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewHolder.name
                     .getLayoutParams();
 
-            if (photo == null) {
+            if (friend.getPhotoName() == null) {
                 viewHolder.photo.setVisibility(View.GONE);
                 params.setMargins(0, ContactsHelper.convertToPixels(10, mContext), 0, 0);
             } else {
+                Bitmap photo = ContactsHelper
+                        .loadBitmapFromStorage(friend.getPhotoName(), mContext);
+
                 viewHolder.photo.setVisibility(View.VISIBLE);
                 viewHolder.photo.setImageBitmap(photo);
 

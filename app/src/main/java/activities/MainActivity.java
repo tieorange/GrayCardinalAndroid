@@ -28,7 +28,9 @@ import java.util.List;
 import adapters.ContactsAdapter;
 import application.Constants;
 import models.Contact;
+import models.ContactInfo;
 import models.SerializableContact;
+import models.SerializableContactInfo;
 import tools.ContactsHelper;
 import tools.popupmenu.PopupMenu;
 
@@ -43,8 +45,11 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initViews();
+
         final android.content.Intent intent = getIntent();
 
         if (intent != null) {
@@ -60,20 +65,29 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
                 SerializableContact serializableContact = gsonContact
                         .fromJson(contactJson, SerializableContact.class);
 
-                Contact contact = new Contact(serializableContact);
-                ContactsHelper.addContact(contact, mContactsAdapter);
+                //contact
+                Contact contact = new Contact(serializableContact, this);
+
+                mContactsAdapter.getList().add(contact);
+                contact.save();
+
+                List<SerializableContactInfo> contactInfoList = serializableContact
+                        .getContactInfoList();
+                for (int i = 0; i < contactInfoList.size(); i++) {
+                    ContactInfo contactInfo = new ContactInfo(contactInfoList.get(i).getInfoName(),
+                            contactInfoList.get(i).getInfoValue(), contact);
+                    contactInfo.save();
+                }
+                List<Contact> list = mContactsAdapter.getList();
+
+                mContactsAdapter.notifyDataSetChanged();
+
+                //initViews();
+
+                list = mContactsAdapter.getList();
+                int a = 0;
             }
         }
-
-        return;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initViews();
-
 
 
      /*   Contact contact = new Contact("Andrii kovalchuk", BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
