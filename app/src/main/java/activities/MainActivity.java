@@ -43,6 +43,12 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
     private ContactsAdapter mContactsAdapter;
     private Contact mLongClickedItem;
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initViews();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
