@@ -19,4 +19,6 @@
     <string name="share_contact_type_intent">text/plain</string>
     <string name="extension_contact_file">.pember</string>
     <string name="extension_manifest">.*\\.pember</string>
+    <string name="app_id">748339995189458</string>
+
 </resources>

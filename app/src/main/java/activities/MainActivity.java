@@ -3,10 +3,16 @@ package activities;
 import com.google.gson.Gson;
 
 import com.activeandroid.query.Select;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.model.GraphUser;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.tieorange.pember.app.R;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -20,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -103,8 +110,55 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
         contactInfo.contact = contact;
         contactInfo.save();*/
 
+        // start Facebook Login
+        Session.openActiveSession(this, true, new Session.StatusCallback() {
+
+            // callback when session changes state
+            @Override
+            public void call(Session session, SessionState state, Exception exception) {
+                if (session.isOpened()) {
+
+                    // make request to the /me API
+                    Request.newMeRequest(session, new Request.GraphUserCallback() {
+
+                        // callback after Graph API response with user object
+                        @Override
+                        public void onCompleted(GraphUser user, Response response) {
+                            if (user != null) {
+                                Toast.makeText(getApplicationContext(),
+                                        "Hello " + user.getName() + "!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }).executeAsync();
+                }
+            }
+        });
+
     }
 
+    /**
+     * Logout From Facebook
+     */
+    public static void callFacebookLogout(Context context) {
+        Session session = Session.getActiveSession();
+        if (session != null) {
+
+            if (!session.isClosed()) {
+                session.closeAndClearTokenInformation();
+                //clear your preferences if saved
+            }
+        } else {
+
+            session = new Session(context);
+            Session.setActiveSession(session);
+
+            session.closeAndClearTokenInformation();
+            //clear your preferences if saved
+
+        }
+
+    }
 
     private void startContactsIntent() {
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
@@ -158,6 +212,7 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
+        Session.getActiveSession().onActivityResult(this, reqCode, resultCode, data);
 
         switch (reqCode) {
             case (Constants.PICK_CONTACT):

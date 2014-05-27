@@ -6,7 +6,6 @@ import com.activeandroid.query.Delete;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -132,7 +131,7 @@ public class ContactsHelper {
                                 .show();
         }*/
         String contactName = contact.getName();
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 20; i++) {
             contact.setName(i
                     + " " + contactName);
             contactsAdapter.getList().add(contact);
@@ -155,14 +154,6 @@ public class ContactsHelper {
     public static int convertToPixels(int dps, Context context) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dps * scale + 0.5f);
-    }
-
-    public static void shareContact(Contact contact, Context context) {
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, contact);
-        sendIntent.setType("file/GrayCardinalContact");
-        context.startActivity(sendIntent);
     }
 
     public static File getExternalCacheDir(final Context context) {
