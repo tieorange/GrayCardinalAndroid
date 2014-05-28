@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import com.tieorange.pember.app.R;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ShareActionProvider;
 
@@ -30,24 +32,25 @@ import java.util.List;
 
 import adapters.InfoAdapter;
 import application.Constants;
-import fragments.InfoListFragment;
 import models.Contact;
 import models.ContactInfo;
 import models.SerializableContact;
 import models.SerializableContactInfo;
 import tools.ContactsHelper;
 import tools.poppyview.PoppyViewHelper;
+import tools.popupmenu.PopupMenu;
 
 
-public class InfoActivity extends ActionBarActivity {
+public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemSelectedListener {
 
     public static final String LOG_TAG = InfoActivity.class.getSimpleName();
     public static Contact mContact;
     public static List<ContactInfo> mInfoList = new ArrayList<ContactInfo>();
     private ShareActionProvider mShareActionProvider;
-    private ListView mUiList;
+    private ListView mUiInfoListView;
     private InfoAdapter mAdapter;
     private PoppyViewHelper mPoppyViewHelper;
+    private ContactInfo mSelectedItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +69,37 @@ public class InfoActivity extends ActionBarActivity {
 
         mInfoList = mContact.infoList();
 
-        mUiList = (ListView) findViewById(R.id.info_activity_list);
+        mUiInfoListView = (ListView) findViewById(R.id.info_activity_list);
         mAdapter = new InfoAdapter(this, InfoActivity.mInfoList);
-        mUiList.setAdapter(mAdapter);
+        mUiInfoListView.setAdapter(mAdapter);
 
+        mUiInfoListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position,
+                    long id) {
+                mSelectedItem = (ContactInfo) parent.getItemAtPosition(position);
+
+                // Create Instance
+                PopupMenu menu = new PopupMenu(InfoActivity.this);
+                menu.setHeaderTitle(mSelectedItem.getName());
+                // Set Listener
+                menu.setOnItemSelectedListener(InfoActivity.this);
+                // Add Menu (Android menu like style)
+                menu.add(Constants.EDIT_IN_POPUP, R.string.edit_info).setIcon(
+                        getResources().getDrawable(R.drawable.ic_edit_info));
+                menu.add(Constants.REMOVE_IN_POPUP, R.string.remove_info).setIcon(
+                        getResources().getDrawable(R.drawable.ic_remove_info));
+                menu.show(view);
+                return false;
+            }
+        });
+        setFooterLogic();
+    }
+
+    private void setFooterLogic() {
         mPoppyViewHelper = new PoppyViewHelper(this);
         View poppyView = mPoppyViewHelper
-                .createPoppyViewOnListView(R.id.info_activity_list, R.layout.poppyview,
+                .createPoppyViewOnListView(R.id.info_activity_list, R.layout.activity_info_footer,
                         new AbsListView.OnScrollListener() {
                             @Override
                             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -91,9 +118,35 @@ public class InfoActivity extends ActionBarActivity {
 
             @Override
             public void onClick(View v) {
-               // Toast.makeText(, "Click me!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(InfoActivity.this, AddInfoActivity.class);
+                startActivityForResult(intent, Constants.REQUEST_CODE_ADD_INFO);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQUEST_CODE_ADD_INFO && resultCode == Activity.RESULT_OK
+                && data != null) {
+
+            //adding info by returned result
+            String infoName = data.getStringExtra(Constants.EXTRAS_INFO_NAME);
+            String infoValue = data.getStringExtra(Constants.EXTRAS_INFO_VALUE);
+
+            AddInfo(infoName, infoValue);
+
+
+        }
+    }
+
+    private void AddInfo(String infoName, String infoValue) {
+        ContactInfo info = new ContactInfo(infoName, infoValue, mContact);
+        mContact.save();
+        info.save();
+
+        mInfoList.add(0, info);
+        mAdapter.notifyDataSetChanged();
     }
 
     private void setContactPhotoToActionBar() {
@@ -146,7 +199,7 @@ public class InfoActivity extends ActionBarActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                InfoListFragment.mAdapter.getFilter().filter(s);
+                mAdapter.getFilter().filter(s);
                 return false;
             }
         });
@@ -174,27 +227,7 @@ public class InfoActivity extends ActionBarActivity {
                 this.finish();
                 break;
             case R.id.inf_menu_item_share:
-                Gson gsonContact = new Gson();
-                String jsonContact = gsonContact.toJson(createSerialContact(mContact));
-                Log.d(LOG_TAG, jsonContact);
-
-                File file = null;
-                try {
-                    file = getCreatedSharedContactFile(jsonContact, this);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-                shareIntent.setType(getString(R.string.share_contact_type_intent));
-
-                // Verify the intent will resolve to at least one activity
-                /*if (shareIntent.resolveActivity(getPackageManager()) != null) {*/
-                startActivity(Intent.createChooser(shareIntent,
-                        getResources().getText(R.string.send_to)));
-                //}
+                shareContact();
 
                 break;
             /*case R.id.action_add_info:
@@ -203,6 +236,30 @@ public class InfoActivity extends ActionBarActivity {
                 break;*/
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void shareContact() {
+        Gson gsonContact = new Gson();
+        String jsonContact = gsonContact.toJson(createSerialContact(mContact));
+        Log.d(LOG_TAG, jsonContact);
+
+        File file = null;
+        try {
+            file = getCreatedSharedContactFile(jsonContact, this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        shareIntent.setType(getString(R.string.share_contact_type_intent));
+
+        // Verify the intent will resolve to at least one activity
+                /*if (shareIntent.resolveActivity(getPackageManager()) != null) {*/
+        startActivity(Intent.createChooser(shareIntent,
+                getResources().getText(R.string.send_to)));
+        //}
     }
 
     public File getCreatedSharedContactFile(String text, Context context) throws IOException {
@@ -238,4 +295,23 @@ public class InfoActivity extends ActionBarActivity {
         return serialContact;
     }
 
+
+
+    @Override
+    public void onItemSelected(tools.popupmenu.MenuItem item) {
+        switch (item.getItemId()) {
+            case Constants.EDIT_IN_POPUP:
+                break;
+
+            case Constants.REMOVE_IN_POPUP:
+                removeInfo();
+                break;
+        }
+    }
+
+    private void removeInfo() {
+        mSelectedItem.delete();
+        mAdapter.getList().remove(mSelectedItem);
+        mAdapter.notifyDataSetChanged();
+    }
 }

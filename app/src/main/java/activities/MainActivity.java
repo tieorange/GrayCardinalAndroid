@@ -185,6 +185,9 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
                 Intent intent = new Intent(view.getContext(), InfoActivity.class);
                 intent.putExtra(Constants.EXTRAS_CONTACT_ID, selectedItem.getId());
                 startActivity(intent);
+                /*overridePendingTransition(
+                        android.R.anim.slide_in_left, android.R.anim.slide_out_right);*/
+
 
             }
         });

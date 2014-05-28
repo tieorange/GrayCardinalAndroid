@@ -15,9 +15,10 @@
             android:layout_alignParentTop="true"
             android:clickable="true"
             android:divider="@null"
+            android:smoothScrollbar="true"
             android:dividerHeight="@dimen/divider_info"
             android:scrollbarStyle="insideInset"
-            android:headerDividersEnabled="false"            />
+            android:headerDividersEnabled="false"/>
     <!-- <fragment
          android:id="@+id/fragment"
          android:name="fragments.InfoListFragment"
