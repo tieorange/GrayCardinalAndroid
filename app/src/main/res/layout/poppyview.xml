@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/footer"
+        android:alpha="0.9"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="8dip"
+        android:paddingLeft="16dip"
+        android:paddingRight="16dip"
+        android:paddingTop="8dip"
+        android:drawableLeft="@drawable/ic_add_new_info_button"
+        android:text="Add new info"
+        style="@style/GreenButton"/>
