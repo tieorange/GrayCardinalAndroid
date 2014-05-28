@@ -32,6 +32,8 @@ import java.util.List;
 
 import adapters.InfoAdapter;
 import application.Constants;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import models.Contact;
 import models.ContactInfo;
 import models.SerializableContact;
@@ -127,6 +129,8 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+
         if (requestCode == Constants.REQUEST_CODE_ADD_INFO && resultCode == Activity.RESULT_OK
                 && data != null) {
 
@@ -136,7 +140,12 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
             AddInfo(infoName, infoValue);
 
+            Crouton.makeText(this, new String("Added"), Style.CONFIRM).show();
 
+        }
+        else if(resultCode == Activity.RESULT_CANCELED)
+        {
+            Crouton.makeText(this, new String("Added"), Style.ALERT).show();
         }
     }
 
