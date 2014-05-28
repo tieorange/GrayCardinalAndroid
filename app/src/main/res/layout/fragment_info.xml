@@ -3,8 +3,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <adapters.QuickReturnListView
-            android:id="@android:id/list"
+    <ListView
+            android:id="@+id/info_list_view"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -13,7 +13,8 @@
             android:clickable="true"
             android:divider="@null"
             android:dividerHeight="@dimen/divider_info"
-            android:scrollbarStyle="insideInset"/>
+            android:scrollbarStyle="insideInset"
+            android:headerDividersEnabled="false"/>
 
     <Button
             android:id="@+id/footer"

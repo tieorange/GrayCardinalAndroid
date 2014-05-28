@@ -4,27 +4,23 @@ package fragments;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.tieorange.pember.app.R;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import activities.AddInfoActivity;
 import activities.InfoActivity;
 import adapters.InfoAdapter;
-import adapters.QuickReturnListView;
 import application.Constants;
 import models.ContactInfo;
 import tools.poppyview.PoppyViewHelper;
@@ -34,7 +30,7 @@ import tools.popupmenu.PopupMenu;
 public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSelectedListener {
 
     public static InfoAdapter mAdapter;
-    private QuickReturnListView mUiInfoListView;
+    private ListView mUiInfoListView;
     private Button mUiAddInfo;
     private int mQuickReturnHeight;
     private int mState = Constants.STATE_ONSCREEN;
@@ -54,7 +50,7 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
     }
 
     private void initViews(View view) {
-        mUiInfoListView = (QuickReturnListView) getListView();
+        mUiInfoListView = (ListView) view.findViewById(R.id.info_list_view);
         mUiAddInfo = (Button) view.findViewById(R.id.footer);
 
         mUiAddInfo.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +69,8 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.REQUEST_CODE_ADD_INFO && resultCode == Activity.RESULT_OK
                 && data != null) {
+
+            //adding info by returned result
             String infoName = data.getStringExtra(Constants.EXTRAS_INFO_NAME);
             String infoValue = data.getStringExtra(Constants.EXTRAS_INFO_VALUE);
 
@@ -116,9 +114,9 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
         initViews(getView());
         setListAdapter();
 
-      /*  mPoppyViewHelper = new PoppyViewHelper(getActivity());
+        mPoppyViewHelper = new PoppyViewHelper(getActivity());
         View poppyView = mPoppyViewHelper
-                .createPoppyViewOnListView(android.R.id.list, R.id.footer,
+                .createPoppyViewOnListView(R.id.info_list_view, R.layout.poppyview,
                         new AbsListView.OnScrollListener() {
                             @Override
                             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -139,82 +137,84 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "Click me!", Toast.LENGTH_SHORT).show();
             }
-        });*/
+        });
 
         //setFooterLogic();
     }
 
-    private void setFooterLogic() {
-        mUiInfoListView.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        mQuickReturnHeight = mUiAddInfo.getHeight();
-                        mUiInfoListView.computeScrollY();
+    /*
+        private void setFooterLogic() {
+            mUiInfoListView.getViewTreeObserver().addOnGlobalLayoutListener(
+                    new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            mQuickReturnHeight = mUiAddInfo.getHeight();
+                            mUiInfoListView.computeScrollY();
+                        }
                     }
-                }
-        );
+            );
 
-        mUiInfoListView.setOnScrollListener(new OnScrollListener() {
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem,
-                    int visibleItemCount, int totalItemCount) {
+            mUiInfoListView.setOnScrollListener(new OnScrollListener() {
+                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+                @Override
+                public void onScroll(AbsListView view, int firstVisibleItem,
+                        int visibleItemCount, int totalItemCount) {
 
-                mScrollY = 0;
-                int translationY = 0;
+                    mScrollY = 0;
+                    int translationY = 0;
 
-                try {
-                    if (mUiInfoListView.scrollYIsComputed()) {
-                        mScrollY = mUiInfoListView.getComputedScrollY();
+                    try {
+                        if (mUiInfoListView.scrollYIsComputed()) {
+                            mScrollY = mUiInfoListView.getComputedScrollY();
+                        }
+                    } catch (NullPointerException ex) {
+                        Log.e(InfoListFragment.class.getSimpleName(), ex.toString());
                     }
-                } catch (NullPointerException ex) {
-                    Log.e(InfoListFragment.class.getSimpleName(), ex.toString());
-                }
 
-                int rawY = mScrollY;
+                    int rawY = mScrollY;
 
-                switch (mState) {
-                    case Constants.STATE_OFFSCREEN:
-                        if (rawY >= mMinRawY) {
-                            mMinRawY = rawY;
-                        } else {
-                            mState = Constants.STATE_RETURNING;
-                        }
-                        translationY = rawY;
-                        break;
+                    switch (mState) {
+                        case Constants.STATE_OFFSCREEN:
+                            if (rawY >= mMinRawY) {
+                                mMinRawY = rawY;
+                            } else {
+                                mState = Constants.STATE_RETURNING;
+                            }
+                            translationY = rawY;
+                            break;
 
-                    case Constants.STATE_ONSCREEN:
-                        if (rawY > mQuickReturnHeight) {
-                            mState = Constants.STATE_OFFSCREEN;
-                            mMinRawY = rawY;
-                        }
-                        translationY = rawY;
-                        break;
+                        case Constants.STATE_ONSCREEN:
+                            if (rawY > mQuickReturnHeight) {
+                                mState = Constants.STATE_OFFSCREEN;
+                                mMinRawY = rawY;
+                            }
+                            translationY = rawY;
+                            break;
 
-                    case Constants.STATE_RETURNING:
+                        case Constants.STATE_RETURNING:
 
-                        translationY = (rawY - mMinRawY) + mQuickReturnHeight;
+                            translationY = (rawY - mMinRawY) + mQuickReturnHeight;
 
-                        System.out.println(translationY);
-                        if (translationY < 0) {
-                            translationY = 0;
-                            mMinRawY = rawY + mQuickReturnHeight;
-                        }
+                            System.out.println(translationY);
+                            if (translationY < 0) {
+                                translationY = 0;
+                                mMinRawY = rawY + mQuickReturnHeight;
+                            }
 
-                        if (rawY == 0) {
-                            mState = Constants.STATE_ONSCREEN;
-                            translationY = 0;
-                        }
+                            if (rawY == 0) {
+                                mState = Constants.STATE_ONSCREEN;
+                                translationY = 0;
+                            }
 
-                        if (translationY > mQuickReturnHeight) {
-                            mState = Constants.STATE_OFFSCREEN;
-                            mMinRawY = rawY;
-                        }
-                        break;
-                }
+                            if (translationY > mQuickReturnHeight) {
+                                mState = Constants.STATE_OFFSCREEN;
+                                mMinRawY = rawY;
+                            }
+                            break;
+                    }
 
-                /** this can be used if the build is below honeycomb **/
+                    /** this can be used if the build is below honeycomb **/
+    /*
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB) {
                     anim = new TranslateAnimation(0, 0, translationY,
                             translationY);
@@ -232,7 +232,7 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
             }
         });
     }
-
+*/
     private void setListAdapter() {
         mAdapter = new InfoAdapter(getActivity(), InfoActivity.mInfoList);
 

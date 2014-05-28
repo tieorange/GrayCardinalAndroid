@@ -16,21 +16,19 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.ListView;
 import android.widget.ShareActionProvider;
 
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import adapters.InfoAdapter;
 import application.Constants;
 import fragments.InfoListFragment;
 import models.Contact;
@@ -38,6 +36,7 @@ import models.ContactInfo;
 import models.SerializableContact;
 import models.SerializableContactInfo;
 import tools.ContactsHelper;
+import tools.poppyview.PoppyViewHelper;
 
 
 public class InfoActivity extends ActionBarActivity {
@@ -46,48 +45,9 @@ public class InfoActivity extends ActionBarActivity {
     public static Contact mContact;
     public static List<ContactInfo> mInfoList = new ArrayList<ContactInfo>();
     private ShareActionProvider mShareActionProvider;
-
-    public static byte[] getSerializedObject(Serializable s) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = null;
-        String loggerTag = "Info";
-        try {
-            oos = new ObjectOutputStream(baos);
-            oos.writeObject(s);
-        } catch (IOException e) {
-            Log.e(loggerTag, e.getMessage(), e);
-            return null;
-        } finally {
-            try {
-                oos.close();
-            } catch (IOException e) {
-            }
-        }
-        byte[] result = baos.toByteArray();
-        Log.d(loggerTag,
-                "Object " + s.getClass().getSimpleName() + " written to byte[]: "
-                        + result.length
-        );
-        return result;
-    }
-
-    public static Object readSerializedObject(byte[] in) {
-        Object result = null;
-        ByteArrayInputStream bais = new ByteArrayInputStream(in);
-        ObjectInputStream ois = null;
-        try {
-            ois = new ObjectInputStream(bais);
-            result = ois.readObject();
-        } catch (Exception e) {
-            result = null;
-        } finally {
-            try {
-                ois.close();
-            } catch (Throwable e) {
-            }
-        }
-        return result;
-    }
+    private ListView mUiList;
+    private InfoAdapter mAdapter;
+    private PoppyViewHelper mPoppyViewHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +65,35 @@ public class InfoActivity extends ActionBarActivity {
         setContactPhotoToActionBar();
 
         mInfoList = mContact.infoList();
+
+        mUiList = (ListView) findViewById(R.id.info_activity_list);
+        mAdapter = new InfoAdapter(this, InfoActivity.mInfoList);
+        mUiList.setAdapter(mAdapter);
+
+        mPoppyViewHelper = new PoppyViewHelper(this);
+        View poppyView = mPoppyViewHelper
+                .createPoppyViewOnListView(R.id.info_activity_list, R.layout.poppyview,
+                        new AbsListView.OnScrollListener() {
+                            @Override
+                            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                                Log.d("ListViewActivity", "onScrollStateChanged");
+                            }
+
+                            @Override
+                            public void onScroll(AbsListView view, int firstVisibleItem,
+                                    int visibleItemCount, int totalItemCount) {
+                                Log.d("ListViewActivity", "onScroll");
+                            }
+                        }
+                );
+
+        poppyView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+               // Toast.makeText(, "Click me!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setContactPhotoToActionBar() {
@@ -247,27 +236,6 @@ public class InfoActivity extends ActionBarActivity {
         serialContact = new SerializableContact(contactName, contactBitmap, serialContacts);
 
         return serialContact;
-    }
-
-    public File createFile(String text) {
-        String filename = "mysecondfile.txt";
-        File myDir = getFilesDir();
-
-        File secondFile = null;
-        try {
-            secondFile = new File(myDir + "/text/", filename);
-            if (secondFile.getParentFile().mkdirs()) {
-                secondFile.createNewFile();
-                FileOutputStream fos = new FileOutputStream(secondFile);
-
-                fos.write(text.getBytes());
-                fos.flush();
-                fos.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return secondFile;
     }
 
 }
