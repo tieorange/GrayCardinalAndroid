@@ -17,6 +17,7 @@
 
     <Button
             android:id="@+id/footer"
+            android:alpha="0.9"
             android:layout_alignParentBottom="true"
             android:paddingBottom="8dip"
             android:paddingLeft="16dip"

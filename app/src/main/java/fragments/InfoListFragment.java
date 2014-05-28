@@ -27,6 +27,7 @@ import adapters.InfoAdapter;
 import adapters.QuickReturnListView;
 import application.Constants;
 import models.ContactInfo;
+import tools.poppyview.PoppyViewHelper;
 import tools.popupmenu.MenuItem;
 import tools.popupmenu.PopupMenu;
 
@@ -42,6 +43,8 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
     private TranslateAnimation anim;
     private ContactInfo mSelectedItem;
 
+    private PoppyViewHelper mPoppyViewHelper;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -51,6 +54,7 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
     }
 
     private void initViews(View view) {
+        mUiInfoListView = (QuickReturnListView) getListView();
         mUiAddInfo = (Button) view.findViewById(R.id.footer);
 
         mUiAddInfo.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +116,32 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
         initViews(getView());
         setListAdapter();
 
-        setFooterLogic();
+      /*  mPoppyViewHelper = new PoppyViewHelper(getActivity());
+        View poppyView = mPoppyViewHelper
+                .createPoppyViewOnListView(android.R.id.list, R.id.footer,
+                        new AbsListView.OnScrollListener() {
+                            @Override
+                            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                                Log.d("ListViewActivity", "onScrollStateChanged");
+                            }
+
+                            @Override
+                            public void onScroll(AbsListView view, int firstVisibleItem,
+                                    int visibleItemCount, int totalItemCount) {
+                                Log.d("ListViewActivity", "onScroll");
+                            }
+                        }
+                );
+
+        poppyView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Click me!", Toast.LENGTH_SHORT).show();
+            }
+        });*/
+
+        //setFooterLogic();
     }
 
     private void setFooterLogic() {
@@ -205,7 +234,6 @@ public class InfoListFragment extends ListFragment implements PopupMenu.OnItemSe
     }
 
     private void setListAdapter() {
-        mUiInfoListView = (QuickReturnListView) getListView();
         mAdapter = new InfoAdapter(getActivity(), InfoActivity.mInfoList);
 
         ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mAdapter);
