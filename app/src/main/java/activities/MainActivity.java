@@ -34,6 +34,7 @@ import java.util.List;
 
 import adapters.ContactsAdapter;
 import application.Constants;
+import application.PemberApplication;
 import models.Contact;
 import models.ContactInfo;
 import models.SerializableContact;
@@ -50,12 +51,34 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
     private ContactsAdapter mContactsAdapter;
     private Contact mLongClickedItem;
 
+    /**
+     * Logout From Facebook
+     */
+    public static void callFacebookLogout(Context context) {
+        Session session = Session.getActiveSession();
+        if (session != null) {
+
+            if (!session.isClosed()) {
+                session.closeAndClearTokenInformation();
+                //clear your preferences if saved
+            }
+        } else {
+
+            session = new Session(context);
+            Session.setActiveSession(session);
+
+            session.closeAndClearTokenInformation();
+            //clear your preferences if saved
+
+        }
+
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
         initViews();
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,29 +160,6 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
     }
 
-    /**
-     * Logout From Facebook
-     */
-    public static void callFacebookLogout(Context context) {
-        Session session = Session.getActiveSession();
-        if (session != null) {
-
-            if (!session.isClosed()) {
-                session.closeAndClearTokenInformation();
-                //clear your preferences if saved
-            }
-        } else {
-
-            session = new Session(context);
-            Session.setActiveSession(session);
-
-            session.closeAndClearTokenInformation();
-            //clear your preferences if saved
-
-        }
-
-    }
-
     private void startContactsIntent() {
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         startActivityForResult(intent, Constants.PICK_CONTACT);
@@ -187,7 +187,6 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
                 startActivity(intent);
                 /*overridePendingTransition(
                         android.R.anim.slide_in_left, android.R.anim.slide_out_right);*/
-
 
             }
         });
@@ -230,6 +229,12 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        PemberApplication.getMixPanel().flush();
+        super.onDestroy();
     }
 
     @Override

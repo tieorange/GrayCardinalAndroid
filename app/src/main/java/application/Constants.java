@@ -16,4 +16,5 @@ public class Constants {
     public static final int STATE_OFFSCREEN = 1;
     public static final int STATE_RETURNING = 2;
     public static final String PHOTOS_DIR_NAME = "imageDir";
+    public static final String MIXPANEL_TOKEN = "c7c9f9014d1e1ccfdc78e32154c9f560";
 }

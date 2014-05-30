@@ -2,6 +2,9 @@ package activities;
 
 import com.tieorange.pember.app.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import application.Constants;
+import application.PemberApplication;
 
 
 public class AddInfoActivity extends ActionBarActivity {
@@ -51,10 +55,24 @@ public class AddInfoActivity extends ActionBarActivity {
 
                     hideKeyboard();
 
+                    mixPanelSendInfo(infoName, infoValue);
+
                     finish();
                 }
             }
         });
+    }
+
+    private void mixPanelSendInfo(String infoName, String infoValue) {
+        JSONObject props = new JSONObject();
+        try {
+            props.put("Name", infoName);
+            props.put("Value", infoValue);
+            PemberApplication.getMixPanel()
+                    .track(getResources().getString(R.string.add_new_info), props);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
