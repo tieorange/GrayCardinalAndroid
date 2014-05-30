@@ -50,6 +50,7 @@ public class AddInfoActivity extends ActionBarActivity {
                     setResult(RESULT_OK, output);
 
                     hideKeyboard();
+
                     finish();
                 }
             }

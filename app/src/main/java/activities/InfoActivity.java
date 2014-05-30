@@ -2,6 +2,7 @@ package activities;
 
 import com.google.gson.Gson;
 
+import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.tieorange.pember.app.R;
 
 import android.app.Activity;
@@ -32,6 +33,7 @@ import java.util.List;
 
 import adapters.InfoAdapter;
 import application.Constants;
+import de.keyboardsurfer.android.widget.crouton.Configuration;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 import models.Contact;
@@ -72,8 +74,12 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
         mInfoList = mContact.infoList();
 
         mUiInfoListView = (ListView) findViewById(R.id.info_activity_list);
+
+        //setting animated adapter
         mAdapter = new InfoAdapter(this, InfoActivity.mInfoList);
-        mUiInfoListView.setAdapter(mAdapter);
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mAdapter);
+        scaleInAnimationAdapter.setAbsListView(mUiInfoListView);
+        mUiInfoListView.setAdapter(scaleInAnimationAdapter);
 
         mUiInfoListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -130,7 +136,6 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
         if (requestCode == Constants.REQUEST_CODE_ADD_INFO && resultCode == Activity.RESULT_OK
                 && data != null) {
 
@@ -140,13 +145,24 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
             AddInfo(infoName, infoValue);
 
-            Crouton.makeText(this, new String("Added"), Style.CONFIRM).show();
 
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            showCroutonAdded();
         }
-        else if(resultCode == Activity.RESULT_CANCELED)
-        {
-            Crouton.makeText(this, new String("Added"), Style.ALERT).show();
-        }
+    }
+
+    private void showCroutonAdded() {
+        final Style style = new Style.Builder()
+                .setBackgroundColorValue(getResources().getColor(R.color.LightGreenButton))
+                .setImageResource(R.drawable.ic_save_info_button).setHeight(
+                        (int) getResources().getDimension(R.dimen.crouton_height))
+                .setConfiguration(new Configuration.Builder()
+                        .setDuration(300)
+                        .build())
+                .build();
+
+        Crouton.makeText(InfoActivity.this, getString(R.string.added), style)
+                .show();
     }
 
     private void AddInfo(String infoName, String infoValue) {
@@ -168,6 +184,12 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
         if (contactPhotoDrawable.getBitmap() != null) {
             getSupportActionBar().setIcon(contactPhotoDrawable);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Crouton.cancelAllCroutons();
     }
 
     @Override
@@ -303,7 +325,6 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
         return serialContact;
     }
-
 
 
     @Override

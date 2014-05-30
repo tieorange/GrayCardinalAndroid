@@ -20,5 +20,6 @@
     <string name="extension_contact_file">.pember</string>
     <string name="extension_manifest">.*\\.pember</string>
     <string name="app_id">748339995189458</string>
+    <string name="added">Added</string>
 
 </resources>

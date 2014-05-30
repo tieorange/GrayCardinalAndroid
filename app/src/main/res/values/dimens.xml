@@ -4,5 +4,6 @@
     <dimen name="activity_vertical_margin">5dp</dimen>
     <dimen name="distance_between_contact_rows">10dp</dimen>
     <dimen name="divider_info">5dp</dimen>
+    <dimen name="crouton_height">30dp</dimen>
 
 </resources>
