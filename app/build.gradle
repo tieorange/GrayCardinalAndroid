@@ -30,5 +30,6 @@ dependencies {
     compile project(':libs:facebook')
     compile 'com.nineoldandroids:library:2.4.+'
     compile 'de.keyboardsurfer.android.widget:crouton:1.8.+'
-    compile "com.mixpanel.android:mixpanel-android:4.2.1@aar"
+    compile 'com.mixpanel.android:mixpanel-android:4.2.1@aar'
+    compile files('libs/simple-facebook-2.0.jar')
 }
