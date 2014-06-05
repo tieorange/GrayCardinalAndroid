@@ -3,10 +3,13 @@ package activities;
 import com.google.gson.Gson;
 
 import com.activeandroid.query.Select;
+import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.facebook.model.GraphObject;
+import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.sromku.simple.fb.Permission;
@@ -99,7 +102,26 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
         mSimpleFacebook.login(mOnFacebookLoginListener);
 
+/* make the API call */
+        new Request(
+                mSimpleFacebook.getSession(),
+                "/me/taggable_friends",
+                null,
+                HttpMethod.GET,
+                new Request.Callback() {
+                    public void onCompleted(Response response) {
+            /* handle the result */
+                        final Response response1 = response;
+                        final GraphObjectList<GraphObject> graphObjectList = response
+                                .getGraphObjectList();
+                        final GraphObject graphObject = response.getGraphObject();
+                        final String rawResponse = response.getRawResponse();
+                        final Request request = response.getRequest();
+                        int a = 0;
 
+                    }
+                }
+        ).executeAsync();
 
 
      /*   Contact contact = new Contact("Andrii kovalchuk", BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
@@ -167,6 +189,7 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
                 Log.i(LOG_TAG, "Logged in");
                 mSimpleFacebook.getFriends(mOnFacebookFriendsListener);
 
+
             }
 
             @Override
@@ -207,6 +230,7 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
                 }
                 mContactsAdapter.notifyDataSetChanged();
             }
+
             @Override
             public void onException(Throwable throwable) {
                 Log.d(LOG_TAG, "Number of friends = " + throwable.toString());
