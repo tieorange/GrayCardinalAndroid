@@ -12,7 +12,6 @@ import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimation
 import com.tieorange.pember.app.R;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -52,29 +51,6 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
     private Contact mLongClickedItem;
 
 
-    /**
-     * Logout From Facebook
-     */
-    public static void callFacebookLogout(Context context) {
-        Session session = Session.getActiveSession();
-        if (session != null) {
-
-            if (!session.isClosed()) {
-                session.closeAndClearTokenInformation();
-                //clear your preferences if saved
-            }
-        } else {
-
-            session = new Session(context);
-            Session.setActiveSession(session);
-
-            session.closeAndClearTokenInformation();
-            //clear your preferences if saved
-
-        }
-
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -89,8 +65,8 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
         getSharedContact();
 
-        Intent intent = new Intent(this, FacebookActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this, FacebookActivity.class);
+        //startActivity(intent);
 
 
      /*   Contact contact = new Contact("Andrii kovalchuk", BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));

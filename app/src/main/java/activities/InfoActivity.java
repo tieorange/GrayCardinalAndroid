@@ -71,15 +71,10 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
         setContactPhotoToActionBar();
 
-        mInfoList = mContact.infoList();
-
         mUiInfoListView = (ListView) findViewById(R.id.info_activity_list);
 
         //setting animated adapter
-        mAdapter = new InfoAdapter(this, InfoActivity.mInfoList);
-        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mAdapter);
-        scaleInAnimationAdapter.setAbsListView(mUiInfoListView);
-        mUiInfoListView.setAdapter(scaleInAnimationAdapter);
+        setAnimatedAdapter();
 
         mUiInfoListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -101,7 +96,27 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
                 return false;
             }
         });
+
+        mUiInfoListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ContactInfo clickedInfo = (ContactInfo) mUiInfoListView.getItemAtPosition(position);
+
+                Intent intent = new Intent(view.getContext(), EditInfoActivity.class);
+                intent.putExtra(Constants.EXTRAS_CLICKED_INFO_ID, clickedInfo.getId());
+                startActivityForResult(intent, Constants.REQUEST_CODE_EDIT_INFO);
+            }
+        });
+
         setFooterLogic();
+    }
+
+    private void setAnimatedAdapter() {
+        mInfoList = mContact.infoList();
+        mAdapter = new InfoAdapter(this, InfoActivity.mInfoList);
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(mAdapter);
+        scaleInAnimationAdapter.setAbsListView(mUiInfoListView);
+        mUiInfoListView.setAdapter(scaleInAnimationAdapter);
     }
 
     private void setFooterLogic() {
@@ -146,6 +161,21 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
             AddInfo(infoName, infoValue);
 
 
+        } else if (requestCode == Constants.REQUEST_CODE_EDIT_INFO
+                && resultCode == Activity.RESULT_OK && data != null) {
+            //Edit
+            String infoName = data.getStringExtra(Constants.EXTRAS_INFO_NAME);
+            String infoValue = data.getStringExtra(Constants.EXTRAS_INFO_VALUE);
+            ContactInfo clickedInfo = ContactInfo
+                    .load(ContactInfo.class,
+                            data.getLongExtra(Constants.EXTRAS_CLICKED_INFO_ID, 0));
+            clickedInfo.setName(infoName);
+            clickedInfo.setValue(infoValue);
+            clickedInfo.save();
+
+            setAnimatedAdapter();
+
+
         } else if (resultCode == Activity.RESULT_CANCELED) {
             showCroutonAdded();
         }
@@ -161,7 +191,7 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
                         .build())
                 .build();
 
-        Crouton.makeText(InfoActivity.this, getString(R.string.added), style)
+        Crouton.makeText(InfoActivity.this, getString(R.string.saved), style)
                 .show();
     }
 

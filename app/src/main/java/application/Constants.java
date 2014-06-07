@@ -8,7 +8,11 @@ public class Constants {
     public static final String EXTRAS_CONTACT_ID = "ContactExtra";
     public static final String EXTRAS_INFO_NAME = "InfoName";
     public static final String EXTRAS_INFO_VALUE = "InfoValue";
+    public static final String EXTRAS_CLICKED_INFO_ID = "ClickedInfoId";
+
     public static final int REQUEST_CODE_ADD_INFO = 1;
+    public static final int REQUEST_CODE_EDIT_INFO = 2;
+
     public static final String FLURRY_API_KEY = "D9WPVPN9P53ZD5KKV2CG";
 
     public static final int DEVIDER_HEIGHT = 10 * 2;

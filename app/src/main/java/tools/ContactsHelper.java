@@ -1,6 +1,7 @@
 package tools;
 
 
+import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Delete;
 
 import android.content.ContentUris;
@@ -13,6 +14,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.ContactsContract;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -131,21 +134,28 @@ public class ContactsHelper {
                                 .show();
         }*/
 
-        contactsAdapter.getList().add(contact);
-        contact.save();
+        //transaction set
+        ActiveAndroid.beginTransaction();
+        try {
+            contactsAdapter.getList().add(contact);
+            contact.save();
 
-        //adding basic info
-        String standartValue = "enter some info here...";
-        //for (int i = 0; i < 20; i++) {
-        ContactInfo info = new ContactInfo("Profession", standartValue, contact);
-        info.save();
-        //}
-        info = new ContactInfo("Interests", standartValue, contact);
-        info.save();
-        info = new ContactInfo("May be helpful in", standartValue, contact);
-        info.save();
+            //adding basic info
+            String standartValue = null;
+            //for (int i = 0; i < 20; i++) {
+            ContactInfo info = new ContactInfo("Profession", standartValue, contact);
+            info.save();
+            //}
+            info = new ContactInfo("Interests", standartValue, contact);
+            info.save();
+            info = new ContactInfo("May be helpful in", standartValue, contact);
+            info.save();
 
-        contactsAdapter.notifyDataSetChanged();
+            contactsAdapter.notifyDataSetChanged();
+            ActiveAndroid.setTransactionSuccessful();
+        } finally {
+            ActiveAndroid.endTransaction();
+        }
 
     }
 
@@ -188,5 +198,11 @@ public class ContactsHelper {
             //You'll need to add proper error handling here
         }
         return String.valueOf(text);
+    }
+
+    public static void hideKeyboard(Context context, View focusedView) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(focusedView.getWindowToken(), 0);
     }
 }

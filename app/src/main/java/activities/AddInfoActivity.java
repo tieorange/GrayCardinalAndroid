@@ -5,19 +5,20 @@ import com.tieorange.pember.app.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
 import application.Constants;
 import application.PemberApplication;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+import tools.ContactsHelper;
 
 
 public class AddInfoActivity extends ActionBarActivity {
@@ -44,7 +45,7 @@ public class AddInfoActivity extends ActionBarActivity {
 
         mUiAddInfo.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 String infoName = mUiName.getText().toString();
                 String infoValue = mUiValue.getText().toString();
                 if (infoName.length() > 0 && infoValue.length() > 0) {
@@ -53,11 +54,17 @@ public class AddInfoActivity extends ActionBarActivity {
                     output.putExtra(Constants.EXTRAS_INFO_VALUE, infoValue);
                     setResult(RESULT_OK, output);
 
-                    hideKeyboard();
+                    ContactsHelper.hideKeyboard(view.getContext(), mUiValue);
 
                     mixPanelSendInfo(infoName, infoValue);
 
                     finish();
+                } else {
+                    //show toast to fill fields
+                    Crouton.cancelAllCroutons();
+                    Crouton.showText(AddInfoActivity.this, "Fill all the fields please",
+                            Style.ALERT);
+
                 }
             }
         });
@@ -75,12 +82,6 @@ public class AddInfoActivity extends ActionBarActivity {
         }
     }
 
-
-    private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mUiValue.getWindowToken(), 0);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

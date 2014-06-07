@@ -45,7 +45,6 @@ public class FacebookActivity extends ActionBarActivity {
         mUiLogin = (Button) findViewById(R.id.facebook_login_button);
         mUiGetFriends = (Button) findViewById(R.id.facebook_activity_get_friends);
         mUiLogoutButton = (Button) findViewById(R.id.facebook_logout_button);
-
 //views listeners
         mUiLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +58,7 @@ public class FacebookActivity extends ActionBarActivity {
                 mSimpleFacebook.logout(mOnLogoutListener);
             }
         });
+
 
         mUiGetFriends.setOnClickListener(new View.OnClickListener() {
             @Override

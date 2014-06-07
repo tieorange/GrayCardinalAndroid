@@ -2,7 +2,9 @@ package adapters;
 
 import com.tieorange.pember.app.R;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +22,10 @@ public class InfoAdapter extends BaseAdapter {
 
     private List<ContactInfo> mList, mListOriginal;
     private LayoutInflater mInflater = null;
+    private Context mContext;
 
     public InfoAdapter(Context context, List<ContactInfo> items) {
+        this.mContext = context;
         this.mList = items;
         this.mListOriginal = items;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -68,13 +72,21 @@ public class InfoAdapter extends BaseAdapter {
 
         if (info != null) {
             viewHolder.name.setText(mList.get(position).getName());
-            viewHolder.value.setText(mList.get(position).getValue());
+
+            if (info.getValue() == null) {
+                viewHolder.value
+                        .setText(mContext.getResources().getText(R.string.enter_some_info_here));
+            } else {
+                viewHolder.value
+                        .setText(mList.get(position).getValue());
+            }
         }
         return view;
     }
 
     public Filter getFilter() {
         return new Filter() {
+            @TargetApi(Build.VERSION_CODES.GINGERBREAD)
             @Override
             protected FilterResults performFiltering(CharSequence filterString) {
                 FilterResults results = new FilterResults();

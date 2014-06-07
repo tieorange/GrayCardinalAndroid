@@ -17,7 +17,7 @@ public class PemberApplication extends Application {
             Permission.EMAIL,
             Permission.USER_FRIENDS,
             Permission.PUBLIC_PROFILE,
-            Permission.READ_FRIENDLISTS
+            Permission.READ_FRIENDLISTS,
     };
     SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
             .setAppId("748339995189458")
