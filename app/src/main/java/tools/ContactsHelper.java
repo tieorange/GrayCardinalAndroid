@@ -130,16 +130,21 @@ public class ContactsHelper {
             Toast.makeText(this, R.string.contact_already_exist, Toast.LENGTH_SHORT)
                                 .show();
         }*/
-        String contactName = contact.getName();
-        for (int i = 0; i < 20; i++) {
-            contact.setName(i
-                    + " " + contactName);
-            contactsAdapter.getList().add(contact);
 
-            ContactInfo info = new ContactInfo("pin to phone", Integer.toString(i), contact);
-            contact.save();
-            info.save();
-        }
+        contactsAdapter.getList().add(contact);
+        contact.save();
+
+        //adding basic info
+        String standartValue = "enter some info here...";
+        //for (int i = 0; i < 20; i++) {
+        ContactInfo info = new ContactInfo("Profession", standartValue, contact);
+        info.save();
+        //}
+        info = new ContactInfo("Interests", standartValue, contact);
+        info.save();
+        info = new ContactInfo("May be helpful in", standartValue, contact);
+        info.save();
+
         contactsAdapter.notifyDataSetChanged();
 
     }

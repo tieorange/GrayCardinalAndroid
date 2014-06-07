@@ -3,20 +3,12 @@ package activities;
 import com.google.gson.Gson;
 
 import com.activeandroid.query.Select;
-import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.facebook.model.GraphObject;
-import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
-import com.sromku.simple.fb.Permission;
-import com.sromku.simple.fb.SimpleFacebook;
-import com.sromku.simple.fb.entities.Profile;
-import com.sromku.simple.fb.listeners.OnFriendsListener;
-import com.sromku.simple.fb.listeners.OnLoginListener;
 import com.tieorange.pember.app.R;
 
 import android.app.Activity;
@@ -29,7 +21,6 @@ import android.provider.ContactsContract;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,9 +50,7 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
     private ListView mUiContactsListView;
     private ContactsAdapter mContactsAdapter;
     private Contact mLongClickedItem;
-    private SimpleFacebook mSimpleFacebook;
-    private OnLoginListener mOnFacebookLoginListener;
-    private OnFriendsListener mOnFacebookFriendsListener;
+
 
     /**
      * Logout From Facebook
@@ -100,28 +89,8 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
         getSharedContact();
 
-        mSimpleFacebook.login(mOnFacebookLoginListener);
-
-/* make the API call */
-        new Request(
-                mSimpleFacebook.getSession(),
-                "/me/taggable_friends",
-                null,
-                HttpMethod.GET,
-                new Request.Callback() {
-                    public void onCompleted(Response response) {
-            /* handle the result */
-                        final Response response1 = response;
-                        final GraphObjectList<GraphObject> graphObjectList = response
-                                .getGraphObjectList();
-                        final GraphObject graphObject = response.getGraphObject();
-                        final String rawResponse = response.getRawResponse();
-                        final Request request = response.getRequest();
-                        int a = 0;
-
-                    }
-                }
-        ).executeAsync();
+        Intent intent = new Intent(this, FacebookActivity.class);
+        startActivity(intent);
 
 
      /*   Contact contact = new Contact("Andrii kovalchuk", BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
@@ -179,76 +148,7 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
             }
         });
 
-        //Facebook
-        mSimpleFacebook = SimpleFacebook.getInstance(this);
 
-        mOnFacebookLoginListener = new OnLoginListener() {
-            @Override
-            public void onLogin() {
-                // change the state of the button or do whatever you want
-                Log.i(LOG_TAG, "Logged in");
-                mSimpleFacebook.getFriends(mOnFacebookFriendsListener);
-
-
-            }
-
-            @Override
-            public void onNotAcceptingPermissions(Permission.Type type) {
-                // user didn't accept READ or WRITE permission
-                Log.w(LOG_TAG, String.format("You didn't accept %s permissions", type.name()));
-            }
-
-            @Override
-            public void onThinking() {
-
-            }
-
-            @Override
-            public void onException(Throwable throwable) {
-
-            }
-
-            @Override
-            public void onFail(String s) {
-
-            }
-
-    /*
-     * You can override other methods here:
-     * onThinking(), onFail(String reason), onException(Throwable throwable)
-     */
-        };
-
-        //friends
-        mOnFacebookFriendsListener = new OnFriendsListener() {
-            @Override
-            public void onComplete(List<Profile> friends) {
-                Log.d(LOG_TAG, "Number of friends = " + friends.size());
-                String name = friends.get(0).getName();
-                for (Profile friend : friends) {
-                    mContactsAdapter.getList().add(new Contact(friend.getName()));
-                }
-                mContactsAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onException(Throwable throwable) {
-                Log.d(LOG_TAG, "Number of friends = " + throwable.toString());
-
-            }
-
-            @Override
-            public void onFail(String reason) {
-
-                Log.d(LOG_TAG, "Number of friends = " + reason);
-            }
-
-
-    /*
-     * You can override other methods here:
-     * onThinking(), onFail(String reason), onException(Throwable throwable)
-     */
-        };
     }
 
     private void getSharedContact() {
@@ -326,16 +226,8 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        mSimpleFacebook = SimpleFacebook.getInstance(this);
-    }
-
-    @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
-        mSimpleFacebook.onActivityResult(this, reqCode, resultCode, data);
         super.onActivityResult(reqCode, resultCode, data);
-        Session.getActiveSession().onActivityResult(this, reqCode, resultCode, data);
 
         switch (reqCode) {
             case (Constants.PICK_CONTACT):

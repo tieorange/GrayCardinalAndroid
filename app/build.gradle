@@ -2,7 +2,7 @@ apply plugin: 'android'
 
 android {
     compileSdkVersion 19
-    buildToolsVersion '19.0.3'
+    buildToolsVersion '19.1.0'
     repositories {
         mavenCentral()
     }
@@ -22,14 +22,15 @@ android {
 
 dependencies {
     // compile 'com.android.support:gridlayout-v7:19.1.0'
-    compile 'com.android.support:appcompat-v7:19.+'
-    compile 'com.nhaarman.listviewanimations:library:2.6.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('libs/activeandroid-3.0.jar')
     compile files('libs/gson-2.2.4.jar')
     compile project(':libs:facebook')
+    compile files('libs/simple-facebook-2.0.jar')
+    compile 'com.android.support:appcompat-v7:19.+'
+    compile 'com.nhaarman.listviewanimations:library:2.6.0'
     compile 'com.nineoldandroids:library:2.4.+'
     compile 'de.keyboardsurfer.android.widget:crouton:1.8.+'
     compile 'com.mixpanel.android:mixpanel-android:4.2.1@aar'
-    compile files('libs/simple-facebook-2.0.jar')
+    compile 'com.android.support:appcompat-v7:19.+'
 }

@@ -9,7 +9,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 
 @Table(name = "Contacts")
@@ -74,7 +73,7 @@ public class Contact extends Model implements Serializable {
 
     public List<ContactInfo> infoList() {
         List<ContactInfo> contacts = getMany(ContactInfo.class, "Contact");
-        Collections.reverse(contacts);
+        //Collections.reverse(contacts);
         return contacts;
 
     }
