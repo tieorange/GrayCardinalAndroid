@@ -88,12 +88,12 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
                 // Set Listener
                 menu.setOnItemSelectedListener(InfoActivity.this);
                 // Add Menu (Android menu like style)
-                menu.add(Constants.EDIT_IN_POPUP, R.string.edit_info).setIcon(
-                        getResources().getDrawable(R.drawable.ic_edit_info));
+                /*menu.add(Constants.EDIT_IN_POPUP, R.string.edit_info).setIcon(
+                        getResources().getDrawable(R.drawable.ic_edit_info));*/
                 menu.add(Constants.REMOVE_IN_POPUP, R.string.remove_info).setIcon(
                         getResources().getDrawable(R.drawable.ic_remove_info));
                 menu.show(view);
-                return false;
+                return true;
             }
         });
 
@@ -121,7 +121,7 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
     private void setFooterLogic() {
         mPoppyViewHelper = new PoppyViewHelper(this);
-        View poppyView = mPoppyViewHelper
+        View footerPoppyView = mPoppyViewHelper
                 .createPoppyViewOnListView(R.id.info_activity_list, R.layout.activity_info_footer,
                         new AbsListView.OnScrollListener() {
                             @Override
@@ -137,7 +137,7 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
                         }
                 );
 
-        poppyView.setOnClickListener(new View.OnClickListener() {
+        footerPoppyView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {

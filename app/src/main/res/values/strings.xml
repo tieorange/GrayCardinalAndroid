@@ -25,5 +25,6 @@
     <string name="title_activity_facebook">FacebookActivity</string>
     <string name="title_activity_edit_info">EditInfoActivity</string>
     <string name="enter_some_info_here">enter some info here...</string>
+    <string name="title_activity_edit_contact">EditContactActivity</string>
 
 </resources>

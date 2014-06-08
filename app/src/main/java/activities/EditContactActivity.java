@@ -3,6 +3,7 @@ package activities;
 import com.tieorange.pember.app.R;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -12,14 +13,14 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import application.Constants;
-import models.ContactInfo;
+import models.Contact;
 import tools.ContactsHelper;
 
-public class EditInfoActivity extends ActionBarActivity {
+public class EditContactActivity extends ActionBarActivity {
 
     private EditText mUiName, mUiValue;
     private Button mUiSaveInfo;
-    private ContactInfo mClickedInfo;
+    private Contact mContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,27 +33,25 @@ public class EditInfoActivity extends ActionBarActivity {
     private void initViews() {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Edit info"); //TODO mock;
+        getSupportActionBar().setTitle("Edit contact"); //TODO mock;
+        setContactPhotoToActionBar();
 
         mUiName = (EditText) findViewById(R.id.add_info_name);
         mUiValue = (EditText) findViewById(R.id.add_info_value);
         mUiSaveInfo = (Button) findViewById(R.id.add_info_add_button);
 
         mUiSaveInfo.setText("Save");
-        mUiName.setText(mClickedInfo.getName());
-        mUiValue.setText(mClickedInfo.getValue());
+        mUiName.setText(mContact.getName());
+        mUiValue.setVisibility(View.GONE); //set Value invisible
 
         mUiSaveInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String infoNewName = mUiName.getText().toString();
-                String infoNewValue = mUiValue.getText().toString();
-                if (!mClickedInfo.getName().equals(infoNewName) ||
-                        !mClickedInfo.getValue().equals(infoNewValue)) {
+                String infoName = mUiName.getText().toString();
+                if (!mContact.getName().equals(infoName)) {//if smth changed
                     Intent output = new Intent();
-                    output.putExtra(Constants.EXTRAS_INFO_NAME, infoNewName);
-                    output.putExtra(Constants.EXTRAS_INFO_VALUE, infoNewValue);
-                    output.putExtra(Constants.EXTRAS_CLICKED_INFO_ID, mClickedInfo.getId());
+                    output.putExtra(Constants.EXTRAS_CONTACT_NAME, infoName);
+                    output.putExtra(Constants.EXTRAS_EDITED_CONTACT_ID, mContact.getId());
                     setResult(RESULT_OK, output);
 
                     ContactsHelper.hideKeyboard(view.getContext(), mUiValue);
@@ -64,25 +63,37 @@ public class EditInfoActivity extends ActionBarActivity {
         });
     }
 
+    private void setContactPhotoToActionBar() {
+        if (mContact.getPhotoName() == null) {
+            return;
+        }
+
+        BitmapDrawable contactPhotoDrawable = new BitmapDrawable(getResources(),
+                ContactsHelper.loadBitmapFromStorage(mContact.getPhotoName(), this));
+        if (contactPhotoDrawable.getBitmap() != null) {
+            getSupportActionBar().setIcon(contactPhotoDrawable);
+        }
+    }
+
     private void getExtras(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
-                mClickedInfo = null;
+                mContact = null;
             } else {
-                Long id = extras.getLong(Constants.EXTRAS_CLICKED_INFO_ID);
-                mClickedInfo = ContactInfo.load(ContactInfo.class, id);
+                Long id = extras.getLong(Constants.EXTRAS_EDITED_CONTACT_ID);
+                mContact = Contact.load(Contact.class, id);
             }
         } else {
-            Long id = savedInstanceState.getLong(Constants.EXTRAS_CLICKED_INFO_ID);
-            mClickedInfo = ContactInfo.load(ContactInfo.class, id);
+            Long id = savedInstanceState.getLong(Constants.EXTRAS_EDITED_CONTACT_ID);
+            mContact = Contact.load(Contact.class, id);
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.edit_info, menu);
+        getMenuInflater().inflate(R.menu.edit_contact, menu);
         return true;
     }
 

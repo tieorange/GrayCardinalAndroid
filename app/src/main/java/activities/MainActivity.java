@@ -83,13 +83,7 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
         mUiContactsListView = (ListView) findViewById(R.id.main_contacts_list);
 
-        mContactsList = new Select().from(Contact.class).execute();
-        mContactsAdapter = new ContactsAdapter(this, mContactsList);
-
-        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(
-                mContactsAdapter);
-        scaleInAnimationAdapter.setAbsListView(mUiContactsListView);
-        mUiContactsListView.setAdapter(scaleInAnimationAdapter);
+        setListViewAdapter();
 
         mUiContactsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -125,6 +119,16 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
         });
 
 
+    }
+
+    private void setListViewAdapter() {
+        mContactsList = new Select().from(Contact.class).execute();
+        mContactsAdapter = new ContactsAdapter(this, mContactsList);
+
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(
+                mContactsAdapter);
+        scaleInAnimationAdapter.setAbsListView(mUiContactsListView);
+        mUiContactsListView.setAdapter(scaleInAnimationAdapter);
     }
 
     private void getSharedContact() {
@@ -217,6 +221,18 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
                 }
                 break;
+            case Constants.REQUEST_CODE_EDIT_CONTACT:
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    String contactNewName = data.getStringExtra(Constants.EXTRAS_CONTACT_NAME);
+                    Contact editedContact = Contact
+                            .load(Contact.class,
+                                    data.getLongExtra(Constants.EXTRAS_EDITED_CONTACT_ID, 0));
+                    editedContact.setName(contactNewName);
+                    editedContact.save();
+
+                    setListViewAdapter();
+                }
+                break;
         }
     }
 
@@ -275,6 +291,9 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
     public void onItemSelected(tools.popupmenu.MenuItem item) {
         switch (item.getItemId()) {
             case Constants.EDIT_IN_POPUP:
+                Intent intent = new Intent(this, EditContactActivity.class);
+                intent.putExtra(Constants.EXTRAS_EDITED_CONTACT_ID, mLongClickedItem.getId());
+                startActivityForResult(intent, Constants.REQUEST_CODE_EDIT_CONTACT);
                 break;
 
             case Constants.REMOVE_IN_POPUP:
