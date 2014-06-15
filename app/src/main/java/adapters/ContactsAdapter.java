@@ -80,22 +80,26 @@ public class ContactsAdapter extends ArrayAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        Contact friend = mList.get(position);
+        Contact contact = mList.get(position);
 
-        if (friend != null) {
+        if (contact != null) {
             viewHolder.mUiName.setText(mList.get(position).getName());
 
-            if (friend.getPhotoName() == null) {
+            if (contact.getPhotoName() == null) {
                 viewHolder.mUiPhoto.setVisibility(View.GONE);
                 viewHolder.mUiLetterAvatarFrame.setVisibility(View.VISIBLE);
-                viewHolder.mUiLetterAvatarText.setText("A");
-                //params.setMargins(0, ContactsHelper.convertToPixels(10, mContext), 0, 0);
+
+                String name = contact.getName();
+                name.trim();
+                String firstLetter = String.valueOf(name.charAt(0));
+
+                viewHolder.mUiLetterAvatarText.setText(firstLetter);
             } else {
                 viewHolder.mUiPhoto.setVisibility(View.VISIBLE);
                 viewHolder.mUiLetterAvatarFrame.setVisibility(View.GONE);
 
                 Bitmap photo = ContactsHelper
-                        .loadBitmapFromStorage(friend.getPhotoName(), mContext);
+                        .loadBitmapFromStorage(contact.getPhotoName(), mContext);
 
                 viewHolder.mUiPhoto.setVisibility(View.VISIBLE);
                 viewHolder.mUiPhoto.setImageBitmap(photo);
