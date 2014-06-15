@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:autofit="http://schemas.android.com/apk/res-auto"
+              android:minHeight="80dp"
+              android:id="@+id/list_raw_contact_linear_layout"
+              android:padding="8dp"
+              android:background="@drawable/row_selector"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal">
+
+    <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:maxLength="45"
+            android:maxLines="2"
+            android:layout_weight="1"
+            android:text="Andriik Kovalchuk Andrii Kovalchuk Andrii Kovalchu"
+            android:textSize="20dp"
+            android:id="@+id/list_raw_contact_name"
+            android:layout_gravity="center_vertical"/>
+
+    <FrameLayout
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:visibility="visible"
+            android:id="@+id/list_raw_contact_letter_avatar_frame"
+            android:layout_gravity="right"
+            android:background="@color/LightGreen">
+
+        <me.grantland.widget.AutofitTextView
+                android:id="@+id/list_raw_contact_letter_avatar_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="A"
+                android:textSize="60sp"
+                android:gravity="center"
+                android:singleLine="true"
+                autofit:minTextSize="8sp"
+                android:textColor="@color/White"/>
+    </FrameLayout>
+
+    <ImageView
+            android:id="@+id/list_raw_contact_photo"
+            android:layout_width="80dp"
+            android:visibility="visible"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_launcher"/>
+
+</LinearLayout>

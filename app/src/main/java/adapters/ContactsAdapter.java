@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.grantland.widget.AutofitTextView;
 import models.Contact;
 import tools.ContactsHelper;
 
@@ -63,13 +65,17 @@ public class ContactsAdapter extends ArrayAdapter {
         View view = convertView;
 
         if (view == null) {
-            view = mInflater.inflate(R.layout.list_raw_contact, null);
+            view = mInflater.inflate(R.layout.list_raw_contact2, null);
 
             viewHolder = new ViewHolder();
-            viewHolder.photo = (ImageView) view.findViewById(R.id.list_raw_contact_photo);
-            viewHolder.name = (TextView) view.findViewById(R.id.list_raw_contact_name);
-            viewHolder.relativeLayout = (RelativeLayout) view
-                    .findViewById(R.id.list_raw_contact_relative_layout);
+            viewHolder.mUiPhoto = (ImageView) view.findViewById(R.id.list_raw_contact_photo);
+            viewHolder.mUiName = (TextView) view.findViewById(R.id.list_raw_contact_name);
+            /*viewHolder.relativeLayout = (RelativeLayout) view
+                    .findViewById(R.id.list_raw_contact_relative_layout);*/
+            viewHolder.mUiLetterAvatarFrame = (FrameLayout) view
+                    .findViewById(R.id.list_raw_contact_letter_avatar_frame);
+            viewHolder.mUiLetterAvatarText = (AutofitTextView) view
+                    .findViewById(R.id.list_raw_contact_letter_avatar_text);
 
             view.setTag(viewHolder);
         } else {
@@ -79,24 +85,29 @@ public class ContactsAdapter extends ArrayAdapter {
         Contact friend = mList.get(position);
 
         if (friend != null) {
-            viewHolder.name.setText(mList.get(position).getName());
+            viewHolder.mUiName.setText(mList.get(position).getName());
 
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewHolder.name
+            /*RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewHolder.mUiName
                     .getLayoutParams();
-
+*/
             if (friend.getPhotoName() == null) {
-                viewHolder.photo.setVisibility(View.GONE);
-                params.setMargins(0, ContactsHelper.convertToPixels(10, mContext), 0, 0);
+                viewHolder.mUiPhoto.setVisibility(View.GONE);
+                viewHolder.mUiLetterAvatarFrame.setVisibility(View.VISIBLE);
+                viewHolder.mUiLetterAvatarText.setText("A");
+                //params.setMargins(0, ContactsHelper.convertToPixels(10, mContext), 0, 0);
             } else {
+                viewHolder.mUiPhoto.setVisibility(View.VISIBLE);
+                viewHolder.mUiLetterAvatarFrame.setVisibility(View.GONE);
+
                 Bitmap photo = ContactsHelper
                         .loadBitmapFromStorage(friend.getPhotoName(), mContext);
 
-                viewHolder.photo.setVisibility(View.VISIBLE);
-                viewHolder.photo.setImageBitmap(photo);
+                viewHolder.mUiPhoto.setVisibility(View.VISIBLE);
+                viewHolder.mUiPhoto.setImageBitmap(photo);
 
-                params.setMargins(0, ContactsHelper.convertToPixels(20, mContext), 0, 0);
+                //params.setMargins(0, ContactsHelper.convertToPixels(20, mContext), 0, 0);
             }
-            viewHolder.name.setLayoutParams(params);
+            //viewHolder.mUiName.setLayoutParams(params);
         }
         return view;
     }
@@ -145,8 +156,10 @@ public class ContactsAdapter extends ArrayAdapter {
     static class ViewHolder {
 
         RelativeLayout relativeLayout;
-        ImageView photo;
-        TextView name;
+        FrameLayout mUiLetterAvatarFrame;
+        ImageView mUiPhoto;
+        TextView mUiName;
+        AutofitTextView mUiLetterAvatarText;
     }
 
 }
