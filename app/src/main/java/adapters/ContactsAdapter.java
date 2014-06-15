@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -70,8 +69,7 @@ public class ContactsAdapter extends ArrayAdapter {
             viewHolder = new ViewHolder();
             viewHolder.mUiPhoto = (ImageView) view.findViewById(R.id.list_raw_contact_photo);
             viewHolder.mUiName = (TextView) view.findViewById(R.id.list_raw_contact_name);
-            /*viewHolder.relativeLayout = (RelativeLayout) view
-                    .findViewById(R.id.list_raw_contact_relative_layout);*/
+
             viewHolder.mUiLetterAvatarFrame = (FrameLayout) view
                     .findViewById(R.id.list_raw_contact_letter_avatar_frame);
             viewHolder.mUiLetterAvatarText = (AutofitTextView) view
@@ -87,9 +85,6 @@ public class ContactsAdapter extends ArrayAdapter {
         if (friend != null) {
             viewHolder.mUiName.setText(mList.get(position).getName());
 
-            /*RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewHolder.mUiName
-                    .getLayoutParams();
-*/
             if (friend.getPhotoName() == null) {
                 viewHolder.mUiPhoto.setVisibility(View.GONE);
                 viewHolder.mUiLetterAvatarFrame.setVisibility(View.VISIBLE);
@@ -105,9 +100,7 @@ public class ContactsAdapter extends ArrayAdapter {
                 viewHolder.mUiPhoto.setVisibility(View.VISIBLE);
                 viewHolder.mUiPhoto.setImageBitmap(photo);
 
-                //params.setMargins(0, ContactsHelper.convertToPixels(20, mContext), 0, 0);
             }
-            //viewHolder.mUiName.setLayoutParams(params);
         }
         return view;
     }
@@ -155,7 +148,6 @@ public class ContactsAdapter extends ArrayAdapter {
 
     static class ViewHolder {
 
-        RelativeLayout relativeLayout;
         FrameLayout mUiLetterAvatarFrame;
         ImageView mUiPhoto;
         TextView mUiName;

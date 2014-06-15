@@ -62,9 +62,12 @@ public class ContactsHelper {
         if (c.moveToFirst()) {
             String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
             long id = Long.parseLong(c.getString(c.getColumnIndex(ContactsContract.Contacts._ID)));
-            String photoName = String.valueOf(id); //unique id of photo get from contact_id
+            String photoName = null;
             Bitmap contactPhotoBitmap = getContactPhoto(context, id);
-            saveBitmapToInternalStorage(contactPhotoBitmap, photoName, context);
+            if (contactPhotoBitmap != null) {
+                photoName = String.valueOf(id); //unique id of photo get from contact_id
+                saveBitmapToInternalStorage(contactPhotoBitmap, photoName, context);
+            }
 
             return new Contact(name, photoName);
         } else {
