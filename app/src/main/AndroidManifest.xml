@@ -91,6 +91,10 @@
             android:name="activities.EditContactActivity"
             android:label="@string/title_activity_edit_contact" >
         </activity>
+        <activity
+            android:name="activities.AddNewContactActivity"
+            android:label="@string/title_activity_add_new_contact" >
+        </activity>
     </application>
 
 </manifest>

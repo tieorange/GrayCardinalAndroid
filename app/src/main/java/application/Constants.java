@@ -11,10 +11,12 @@ public class Constants {
     public static final String EXTRAS_CLICKED_INFO_ID = "ClickedInfoId";
     public static final String EXTRAS_CONTACT_NAME = "ContactName";
     public static final String EXTRAS_EDITED_CONTACT_ID = "EditedContactId";
+    public static final String EXTRAS_NEW_CONTACT_OBJECT = "NewContactObject";
 
     public static final int REQUEST_CODE_ADD_INFO = 1;
     public static final int REQUEST_CODE_EDIT_INFO = 2;
     public static final int REQUEST_CODE_EDIT_CONTACT = 3;
+    public static final int REQUEST_CODE_CREATE_NEW_CONTACT = 4;
 
     public static final String FLURRY_API_KEY = "D9WPVPN9P53ZD5KKV2CG";
 
@@ -27,5 +29,6 @@ public class Constants {
     public static final String PHOTOS_DIR_NAME = "imageDir";
     public static final String MIXPANEL_TOKEN = "c7c9f9014d1e1ccfdc78e32154c9f560";
     public static final Uri FRIEND_PICKER = Uri.parse("picker://friend");
+
 
 }

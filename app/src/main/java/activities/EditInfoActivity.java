@@ -34,11 +34,11 @@ public class EditInfoActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Edit info"); //TODO mock;
 
-        mUiName = (EditText) findViewById(R.id.add_info_name);
+        mUiName = (EditText) findViewById(R.id.add_contact_name);
         mUiValue = (EditText) findViewById(R.id.add_info_value);
         mUiSaveInfo = (Button) findViewById(R.id.add_info_add_button);
 
-        mUiSaveInfo.setText("Save");
+        //mUiSaveInfo.setText("Save");
         mUiName.setText(mClickedInfo.getName());
         mUiValue.setText(mClickedInfo.getValue());
 

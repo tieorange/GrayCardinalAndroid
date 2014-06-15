@@ -12,6 +12,8 @@ import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimation
 import com.tieorange.pember.app.R;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -235,6 +237,13 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
                     setListViewAdapter();
                 }
                 break;
+            case Constants.REQUEST_CODE_CREATE_NEW_CONTACT:
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    Contact createdContact = (Contact) data
+                            .getSerializableExtra(Constants.EXTRAS_NEW_CONTACT_OBJECT);
+                    ContactsHelper.addContact(createdContact, mContactsAdapter);
+                }
+                break;
         }
     }
 
@@ -259,7 +268,29 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
             return true;
         }*/
         if (id == R.id.main_menu_action_add_contact) {
-            startContactsIntent();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Add new contact");
+            builder.setItems(R.array.addNewContact, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case 0:
+                            startContactsIntent();
+                            break;
+                        case 1:
+                            Intent intent = new Intent(MainActivity.this,
+                                    AddNewContactActivity.class);
+                            startActivityForResult(intent,
+                                    Constants.REQUEST_CODE_CREATE_NEW_CONTACT);
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+            });
+            builder.create().show();
+
+
         }
         return super.onOptionsItemSelected(item);
     }

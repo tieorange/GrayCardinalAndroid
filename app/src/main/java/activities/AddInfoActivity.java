@@ -39,7 +39,7 @@ public class AddInfoActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("New Info"); //TODO mock;
 
-        mUiName = (EditText) findViewById(R.id.add_info_name);
+        mUiName = (EditText) findViewById(R.id.add_contact_name);
         mUiValue = (EditText) findViewById(R.id.add_info_value);
         mUiAddInfo = (Button) findViewById(R.id.add_info_add_button);
 

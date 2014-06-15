@@ -36,11 +36,11 @@ public class EditContactActivity extends ActionBarActivity {
         getSupportActionBar().setTitle("Edit contact"); //TODO mock;
         setContactPhotoToActionBar();
 
-        mUiName = (EditText) findViewById(R.id.add_info_name);
+        mUiName = (EditText) findViewById(R.id.add_contact_name);
         mUiValue = (EditText) findViewById(R.id.add_info_value);
         mUiSaveInfo = (Button) findViewById(R.id.add_info_add_button);
 
-        mUiSaveInfo.setText("Save");
+        //mUiSaveInfo.setText("Save");
         mUiName.setText(mContact.getName());
         mUiValue.setVisibility(View.GONE); //set Value invisible
 
