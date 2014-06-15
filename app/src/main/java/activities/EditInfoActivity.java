@@ -47,19 +47,15 @@ public class EditInfoActivity extends ActionBarActivity {
             public void onClick(View view) {
                 String infoNewName = mUiName.getText().toString();
                 String infoNewValue = mUiValue.getText().toString();
-                if (!mClickedInfo.getName().equals(infoNewName) ||
-                        !mClickedInfo.getValue().equals(infoNewValue)) {
-                    Intent output = new Intent();
-                    output.putExtra(Constants.EXTRAS_INFO_NAME, infoNewName);
-                    output.putExtra(Constants.EXTRAS_INFO_VALUE, infoNewValue);
-                    output.putExtra(Constants.EXTRAS_CLICKED_INFO_ID, mClickedInfo.getId());
-                    setResult(RESULT_OK, output);
 
-                    ContactsHelper.hideKeyboard(view.getContext(), mUiValue);
-                    finish();
-                } else {
-                    finish();
-                }
+                Intent output = new Intent();
+                output.putExtra(Constants.EXTRAS_INFO_NAME, infoNewName);
+                output.putExtra(Constants.EXTRAS_INFO_VALUE, infoNewValue);
+                output.putExtra(Constants.EXTRAS_CLICKED_INFO_ID, mClickedInfo.getId());
+                setResult(RESULT_OK, output);
+
+                ContactsHelper.hideKeyboard(view.getContext(), mUiValue);
+                finish();
             }
         });
     }

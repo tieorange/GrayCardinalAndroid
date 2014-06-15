@@ -65,9 +65,11 @@ public class MainActivity extends ActionBarActivity implements PopupMenu.OnItemS
 
         getSharedContact();
 
-        //Intent intent = new Intent(this, FacebookActivity.class);
-        //startActivity(intent);
-
+        //final String hashKey = Utils.getHashKey(this);
+        //Log.d(LOG_TAG, "HASHKEY  = " + hashKey);
+        /*Intent intent = new Intent(this, FacebookActivity.class);
+        startActivity(intent);
+*/
 
      /*   Contact contact = new Contact("Andrii kovalchuk", BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
         contact.save();
