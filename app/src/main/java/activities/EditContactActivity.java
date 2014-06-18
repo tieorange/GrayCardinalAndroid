@@ -1,7 +1,5 @@
 package activities;
 
-import com.tieorange.pember.app.R;
-
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -11,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.tieorange.pember.app.R;
 
 import application.Constants;
 import models.Contact;
@@ -33,14 +33,14 @@ public class EditContactActivity extends ActionBarActivity {
     private void initViews() {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Edit contact"); //TODO mock;
+        getSupportActionBar().setTitle(getString(R.string.edit_contact)); //TODO mock;
         setContactPhotoToActionBar();
 
         mUiName = (EditText) findViewById(R.id.add_contact_name);
         mUiValue = (EditText) findViewById(R.id.add_info_value);
         mUiSaveInfo = (Button) findViewById(R.id.add_info_add_button);
 
-        //mUiSaveInfo.setText("Save");
+
         mUiName.setText(mContact.getName());
         mUiValue.setVisibility(View.GONE); //set Value invisible
 

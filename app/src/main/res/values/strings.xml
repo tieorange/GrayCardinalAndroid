@@ -4,7 +4,7 @@
     <string name="app_name">Pember</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="add_new_contact">add new contact</string>
+    <string name="add_new_contact">Add new contact</string>
     <string name="title_activity_info">InfoActivity</string>
     <string name="title_activity_add_info">AddInfoActivity</string>
     <string name="add_new_info">Add new info</string>
@@ -28,5 +28,7 @@
     <string name="title_activity_edit_contact">EditContactActivity</string>
     <string name="contact_name">Contact name</string>
     <string name="title_activity_add_new_contact">AddNewContactActivity</string>
+    <string name="new_info">New Info</string>
+    <string name="edit_contact">Edit contact</string>
 
 </resources>

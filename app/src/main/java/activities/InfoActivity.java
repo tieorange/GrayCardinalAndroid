@@ -53,7 +53,7 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
     private ShareActionProvider mShareActionProvider;
     private ListView mUiInfoListView;
     private InfoAdapter mAdapter;
-    private PoppyViewHelper mPoppyViewHelper;
+    private PoppyViewHelper mFooterPoppyViewHelper;
     private ContactInfo mSelectedItem;
 
     @Override
@@ -120,8 +120,8 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
     }
 
     private void setFooterLogic() {
-        mPoppyViewHelper = new PoppyViewHelper(this);
-        View footerPoppyView = mPoppyViewHelper
+        mFooterPoppyViewHelper = new PoppyViewHelper(this);
+        View footerPoppyView = mFooterPoppyViewHelper
                 .createPoppyViewOnListView(R.id.info_activity_list, R.layout.activity_info_footer,
                         new AbsListView.OnScrollListener() {
                             @Override
@@ -159,25 +159,27 @@ public class InfoActivity extends ActionBarActivity implements PopupMenu.OnItemS
             String infoValue = data.getStringExtra(Constants.EXTRAS_INFO_VALUE);
 
             AddInfo(infoName, infoValue);
+            showCroutonAdded();
 
 
         } else if (requestCode == Constants.REQUEST_CODE_EDIT_INFO
                 && resultCode == Activity.RESULT_OK && data != null) {
             //Edit
-            String infoName = data.getStringExtra(Constants.EXTRAS_INFO_NAME);
-            String infoValue = data.getStringExtra(Constants.EXTRAS_INFO_VALUE);
-            ContactInfo clickedInfo = ContactInfo
+            String infoEditedName = data.getStringExtra(Constants.EXTRAS_INFO_NAME);
+            String infoEditedValue = data.getStringExtra(Constants.EXTRAS_INFO_VALUE);
+            ContactInfo editingInfo = ContactInfo
                     .load(ContactInfo.class,
                             data.getLongExtra(Constants.EXTRAS_CLICKED_INFO_ID, 0));
-            clickedInfo.setName(infoName);
-            clickedInfo.setValue(infoValue);
-            clickedInfo.save();
+            editingInfo.setName(infoEditedName);
+            editingInfo.setValue(infoEditedValue);
+            editingInfo.save();
 
-            setAnimatedAdapter();
+            setAnimatedAdapter(); //update listview
+            showCroutonAdded();
 
 
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            showCroutonAdded();
+
         }
     }
 

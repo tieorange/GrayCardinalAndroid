@@ -1,10 +1,5 @@
 package activities;
 
-import com.tieorange.pember.app.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -13,6 +8,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.tieorange.pember.app.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import application.Constants;
 import application.PemberApplication;
@@ -37,7 +37,7 @@ public class AddInfoActivity extends ActionBarActivity {
     private void initViews() {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("New Info"); //TODO mock;
+        getSupportActionBar().setTitle(getString(R.string.new_info));
 
         mUiName = (EditText) findViewById(R.id.add_contact_name);
         mUiValue = (EditText) findViewById(R.id.add_info_value);
@@ -48,7 +48,7 @@ public class AddInfoActivity extends ActionBarActivity {
             public void onClick(View view) {
                 String infoName = mUiName.getText().toString();
                 String infoValue = mUiValue.getText().toString();
-                if (infoName.length() > 0 && infoValue.length() > 0) {
+                if (infoName.length() > 0) {
                     Intent output = new Intent();
                     output.putExtra(Constants.EXTRAS_INFO_NAME, infoName);
                     output.putExtra(Constants.EXTRAS_INFO_VALUE, infoValue);
